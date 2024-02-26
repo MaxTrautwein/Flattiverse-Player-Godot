@@ -1,0 +1,42 @@
+[gd_scene load_steps=4 format=3 uid="uid://d0h5ffdu6t1br"]
+
+[ext_resource type="Script" path="res://MainMenue.cs" id="1_8vjxp"]
+[ext_resource type="Script" path="res://Connect.cs" id="2_gac8i"]
+[ext_resource type="Script" path="res://InfoBox.cs" id="2_k64n7"]
+
+[node name="Control" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -2.0
+offset_right = -2.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_8vjxp")
+
+[node name="Label" type="Label" parent="."]
+layout_mode = 0
+offset_left = 45.0
+offset_top = 17.0
+offset_right = 115.0
+offset_bottom = 40.0
+text = "Test Text"
+
+[node name="Connect" type="Button" parent="."]
+layout_mode = 0
+offset_left = 328.0
+offset_top = 335.0
+offset_right = 441.0
+offset_bottom = 381.0
+text = "Connect"
+script = ExtResource("2_gac8i")
+
+[node name="InfoBox" type="RichTextLabel" parent="."]
+layout_mode = 0
+offset_left = 43.0
+offset_top = 59.0
+offset_right = 787.0
+offset_bottom = 295.0
+text = "TODO"
+script = ExtResource("2_k64n7")

@@ -2,7 +2,7 @@ using Godot;
 using System;
 
 
-public partial class Ship : Area2D
+public partial class _Ship : Area2D
 {
 	public Vector2 ScreenSize; // Size of the game window.	 
 	
