@@ -1,8 +1,10 @@
-[gd_scene load_steps=4 format=3 uid="uid://d0h5ffdu6t1br"]
+[gd_scene load_steps=6 format=3 uid="uid://d0h5ffdu6t1br"]
 
 [ext_resource type="Script" path="res://MainMenue.cs" id="1_8vjxp"]
 [ext_resource type="Script" path="res://Connect.cs" id="2_gac8i"]
 [ext_resource type="Script" path="res://InfoBox.cs" id="2_k64n7"]
+[ext_resource type="Script" path="res://GalaxiesListBox.cs" id="4_j8dai"]
+[ext_resource type="Script" path="res://TeamsListBox.cs" id="5_g7sun"]
 
 [node name="Control" type="Control"]
 layout_mode = 3
@@ -17,11 +19,11 @@ script = ExtResource("1_8vjxp")
 
 [node name="Label" type="Label" parent="."]
 layout_mode = 0
-offset_left = 45.0
-offset_top = 17.0
-offset_right = 115.0
-offset_bottom = 40.0
-text = "Test Text"
+offset_left = 17.0
+offset_top = 6.0
+offset_right = 87.0
+offset_bottom = 29.0
+text = "Flattiverse"
 
 [node name="Connect" type="Button" parent="."]
 layout_mode = 0
@@ -36,7 +38,23 @@ script = ExtResource("2_gac8i")
 layout_mode = 0
 offset_left = 43.0
 offset_top = 59.0
-offset_right = 787.0
+offset_right = 503.0
 offset_bottom = 295.0
 text = "TODO"
 script = ExtResource("2_k64n7")
+
+[node name="GalaxiesListBox" type="ItemList" parent="."]
+layout_mode = 0
+offset_left = 587.0
+offset_top = 4.0
+offset_right = 797.0
+offset_bottom = 166.0
+script = ExtResource("4_j8dai")
+
+[node name="TeamsListBox" type="ItemList" parent="."]
+layout_mode = 0
+offset_left = 590.0
+offset_top = 196.0
+offset_right = 799.0
+offset_bottom = 300.0
+script = ExtResource("5_g7sun")

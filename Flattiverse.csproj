@@ -6,6 +6,6 @@
     <EnableDynamicLoading>true</EnableDynamicLoading>
   </PropertyGroup>
   <ItemGroup>
-    <PackageReference Include="Flattiverse.Connector" Version="0.0.0.1" />
+    <PackageReference Include="Flattiverse.Connector" Version="0.0.0.2" />
   </ItemGroup>
 </Project>
