@@ -11,7 +11,7 @@ public partial class Connect : Button
 		Thread thread1 = new Thread(GameManager.Connect);
 		thread1.Start();
 		thread1.Join();
-		GetTree().ChangeSceneToFile("res://game.tscn");
+		GetTree().ChangeSceneToFile("res://Game/game.tscn");
 	}
 
 	// Called when the node enters the scene tree for the first time.
