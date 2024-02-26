@@ -109,6 +109,10 @@ public static class GameManager
  
     
     
-    private const string apiKey = "377c5b53ec3ed33d1a9b46bc9afef90f581b4705054c68ca68946d7f25f05c92";
+    private static string apiKey = "SetMe";
+    public static string ApiKey
+    {
+        set => apiKey = value;
+    }
 
 }

@@ -58,3 +58,11 @@ offset_top = 196.0
 offset_right = 799.0
 offset_bottom = 300.0
 script = ExtResource("5_apj1x")
+
+[node name="SettingsButton" type="Button" parent="."]
+layout_mode = 0
+offset_left = 6.0
+offset_top = 356.0
+offset_right = 126.0
+offset_bottom = 392.0
+text = "Settings"

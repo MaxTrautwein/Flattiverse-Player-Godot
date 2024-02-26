@@ -1,0 +1,46 @@
+[gd_scene load_steps=2 format=3 uid="uid://cphyegcgpwgip"]
+
+[ext_resource type="Script" path="res://Settings.cs" id="1_vymrf"]
+
+[node name="Settings" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_vymrf")
+
+[node name="APIKey_Line" type="LineEdit" parent="."]
+layout_mode = 0
+offset_left = 80.0
+offset_top = 48.0
+offset_right = 752.0
+offset_bottom = 79.0
+placeholder_text = "Your API Key"
+
+[node name="Label" type="Label" parent="."]
+layout_mode = 0
+offset_left = 8.0
+offset_top = 49.0
+offset_right = 48.0
+offset_bottom = 72.0
+text = "API Key
+"
+
+[node name="Label2" type="Label" parent="."]
+layout_mode = 0
+offset_left = 352.0
+offset_top = 16.0
+offset_right = 414.0
+offset_bottom = 39.0
+text = "Settings
+"
+
+[node name="SaveButton" type="Button" parent="."]
+layout_mode = 0
+offset_left = 328.0
+offset_top = 344.0
+offset_right = 456.0
+offset_bottom = 385.0
+text = "Save & Back"
