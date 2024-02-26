@@ -1,9 +1,9 @@
 [gd_scene load_steps=5 format=3 uid="uid://b8hbtcp10m3hf"]
 
-[ext_resource type="Script" path="res://game.cs" id="1_kbjii"]
+[ext_resource type="Script" path="res://Game/game.cs" id="1_kbjii"]
 [ext_resource type="PackedScene" uid="uid://bjodovntg4dbd" path="res://HUD/hud.tscn" id="2_b3ihb"]
-[ext_resource type="Script" path="res://PlayerShip.cs" id="3_i1t3d"]
-[ext_resource type="Script" path="res://GameObject.cs" id="4_73qgk"]
+[ext_resource type="Script" path="res://Game/PlayerShip.cs" id="3_i1t3d"]
+[ext_resource type="Script" path="res://Game/GameObject.cs" id="4_73qgk"]
 
 [node name="Game" type="Node"]
 script = ExtResource("1_kbjii")

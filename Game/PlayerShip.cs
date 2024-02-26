@@ -28,6 +28,7 @@ public partial class PlayerShip : Node2D
 			DisplayHelper.PlayerPos = position;
 			
 			direction = GameManager.PlayerShip.Direction;
+			
 			QueueRedraw();
 		}
 	}
@@ -40,6 +41,9 @@ public partial class PlayerShip : Node2D
 	{
 		base._Draw();
 		DrawCircle(_ScreenCenter, (float)(shipSize * DisplayHelper.Zoom),Colors.Green);
+		
+		//Inducate Direction with a Line into the Relevant Direction
+		//DrawLine(_ScreenCenter);
 
 	}
 }

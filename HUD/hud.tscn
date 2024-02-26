@@ -1,6 +1,7 @@
-[gd_scene load_steps=2 format=3 uid="uid://bjodovntg4dbd"]
+[gd_scene load_steps=3 format=3 uid="uid://bjodovntg4dbd"]
 
 [ext_resource type="Script" path="res://HUD/StatusBar.cs" id="1_flqkt"]
+[ext_resource type="Script" path="res://HUD/FPS_Cnt.cs" id="2_lx27n"]
 
 [node name="HUD" type="CanvasLayer"]
 
@@ -11,3 +12,8 @@ offset_right = 665.0
 offset_bottom = 396.0
 text = "Hull: 100% - Energy: 100% - ..."
 script = ExtResource("1_flqkt")
+
+[node name="FPS_Cnt" type="Label" parent="."]
+offset_right = 40.0
+offset_bottom = 23.0
+script = ExtResource("2_lx27n")
