@@ -1,0 +1,13 @@
+[gd_scene load_steps=2 format=3 uid="uid://bjodovntg4dbd"]
+
+[ext_resource type="Script" path="res://HUD/StatusBar.cs" id="1_flqkt"]
+
+[node name="HUD" type="CanvasLayer"]
+
+[node name="StatusBar" type="Label" parent="."]
+offset_left = 8.0
+offset_top = 368.0
+offset_right = 665.0
+offset_bottom = 396.0
+text = "Hull: 100% - Energy: 100% - ..."
+script = ExtResource("1_flqkt")

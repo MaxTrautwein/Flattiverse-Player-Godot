@@ -40,10 +40,8 @@ public static class DisplayHelper
 
     public static Vector2 TransformToDisplay(Vector2 GamePos)
     {
-        var relativePos = GamePos - PlayerPos + ScreenCenter;
-
-        relativePos *= Zoom;
-
+        var relativePos = (GamePos - PlayerPos) * Zoom + ScreenCenter;
+        
         return relativePos;
     }
 }

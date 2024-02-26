@@ -32,6 +32,7 @@ public partial class GameObject : Node2D
 		Vector2 pos = DisplayHelper.TransformToDisplay(_unit.Position.toGodot());
 		
 		DrawCircle(pos, (float)(_unit.Radius * DisplayHelper.Zoom),Colors.Red);
+		DrawString(ThemeDB.FallbackFont,pos,string.Format($"{_unit.Name}"), fontSize: Mathf.CeilToInt(16 * DisplayHelper.Zoom) , modulate: Colors.White );
 
 	}
 }
