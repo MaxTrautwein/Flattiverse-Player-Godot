@@ -6,6 +6,7 @@ using Flattiverse;
 using Flattiverse.Connector.Hierarchy;
 using Flattiverse.Connector.MissionSelection;
 using Flattiverse.Connector.Units;
+using Flattiverse.Utils;
 
 
 public partial class game : Node
@@ -43,6 +44,16 @@ public partial class game : Node
 	// Called every frame. 'delta' is the elapsed time since the previous frame.
 	public override void _Process(double delta)
 	{
+
+		if (Input.IsActionPressed("ZoomIn"))
+		{
+			DisplayHelper.Zoom = 1f;
+		}
+		if (Input.IsActionJustPressed("ZoomOut"))
+		{
+			DisplayHelper.Zoom *= 0.99f;
+			GD.Print($"Zoom: {DisplayHelper.Zoom}");
+		}
 		
 	}
 	

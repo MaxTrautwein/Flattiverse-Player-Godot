@@ -1,6 +1,7 @@
 using Godot;
 using System;
 using Flattiverse.Connector;
+using Flattiverse.Utils;
 
 public partial class PlayerShip : Node2D
 {
@@ -13,6 +14,7 @@ public partial class PlayerShip : Node2D
 	{
 		ScreenSize = GetViewportRect().Size;
 		_ScreenCenter = ScreenSize / 2;
+		DisplayHelper.Screensize = ScreenSize;
 	}
 
 	// Called every frame. 'delta' is the elapsed time since the previous frame.
@@ -21,10 +23,10 @@ public partial class PlayerShip : Node2D
 		if (GameManager.PlayerShip != null)
 		{
 			shipSize = GameManager.PlayerShip.Size;
-			var pos = GameManager.PlayerShip.Position;
-			//GD.Print($"Ship Size: {shipSize} - {pos}");
-			position.X = (float)pos.X;
-			position.Y = (float)pos.Y;
+			position = GameManager.PlayerShip.Position.toGodot();
+
+			DisplayHelper.PlayerPos = position;
+			
 			direction = GameManager.PlayerShip.Direction;
 			QueueRedraw();
 		}
@@ -33,12 +35,11 @@ public partial class PlayerShip : Node2D
 	private double direction = 0;
 	private double shipSize = 0;
 	private Vector2 position = Vector2.Zero;
-	public double zoom = 1;
 	
 	public override void _Draw()
 	{
 		base._Draw();
-		DrawCircle(_ScreenCenter, (float)(shipSize * zoom),Colors.Green);
+		DrawCircle(_ScreenCenter, (float)(shipSize * DisplayHelper.Zoom),Colors.Green);
 
 	}
 }

@@ -3,6 +3,7 @@ using System;
 using System.Linq;
 using Flattiverse.Connector;
 using Flattiverse.Connector.Units;
+using Flattiverse.Utils;
 
 public partial class GameObject : Node2D
 {
@@ -28,10 +29,9 @@ public partial class GameObject : Node2D
 	public override void _Draw()
 	{
 		base._Draw();
-		Vector2 pos = Vector2.Zero;
-		pos.X = (float)_unit.Position.X;
-		pos.Y = (float)_unit.Position.Y;
-		DrawCircle(pos, (float)(_unit.Radius * 1),Colors.Red);
+		Vector2 pos = DisplayHelper.TransformToDisplay(_unit.Position.toGodot());
+		
+		DrawCircle(pos, (float)(_unit.Radius * DisplayHelper.Zoom),Colors.Red);
 
 	}
 }

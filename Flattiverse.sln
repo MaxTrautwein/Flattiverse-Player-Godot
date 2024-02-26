@@ -2,6 +2,8 @@
 # Visual Studio 2012
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Flattiverse", "Flattiverse.csproj", "{11503023-CD35-45DF-B84F-5B57BD4E8A0E}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Flattiverse.Tests", "..\Flattiverse.Tests\Flattiverse.Tests.csproj", "{14CC68E8-977A-4A1E-B4F0-1FA6D2FFE655}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 	Debug|Any CPU = Debug|Any CPU
@@ -15,5 +17,11 @@ Global
 		{11503023-CD35-45DF-B84F-5B57BD4E8A0E}.ExportDebug|Any CPU.Build.0 = ExportDebug|Any CPU
 		{11503023-CD35-45DF-B84F-5B57BD4E8A0E}.ExportRelease|Any CPU.ActiveCfg = ExportRelease|Any CPU
 		{11503023-CD35-45DF-B84F-5B57BD4E8A0E}.ExportRelease|Any CPU.Build.0 = ExportRelease|Any CPU
+		{14CC68E8-977A-4A1E-B4F0-1FA6D2FFE655}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{14CC68E8-977A-4A1E-B4F0-1FA6D2FFE655}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{14CC68E8-977A-4A1E-B4F0-1FA6D2FFE655}.ExportDebug|Any CPU.ActiveCfg = Debug|Any CPU
+		{14CC68E8-977A-4A1E-B4F0-1FA6D2FFE655}.ExportDebug|Any CPU.Build.0 = Debug|Any CPU
+		{14CC68E8-977A-4A1E-B4F0-1FA6D2FFE655}.ExportRelease|Any CPU.ActiveCfg = Debug|Any CPU
+		{14CC68E8-977A-4A1E-B4F0-1FA6D2FFE655}.ExportRelease|Any CPU.Build.0 = Debug|Any CPU
 	EndGlobalSection
 EndGlobal
