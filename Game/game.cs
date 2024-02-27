@@ -22,7 +22,10 @@ public partial class game : Node
 	{
 		
 		
+		
 	}
+
+	
 
 	public static void RegisterUnit(Unit unit)
 	{
@@ -45,18 +48,52 @@ public partial class game : Node
 	public override void _Process(double delta)
 	{
 
-		if (Input.IsActionPressed("ZoomIn"))
+		if (Input.IsActionJustPressed("ZoomIn"))
 		{
-			DisplayHelper.Zoom = 1f;
+			DisplayHelper.Zoom *= 1.1f;
 		}
 		if (Input.IsActionJustPressed("ZoomOut"))
 		{
 			DisplayHelper.Zoom *= 0.99f;
-			GD.Print($"Zoom: {DisplayHelper.Zoom}");
+		}
+
+		if (Input.IsActionJustPressed("ResetZoom"))
+		{
+			DisplayHelper.Zoom = 1f;
+		}
+		if (Input.IsActionPressed("MoveToPos"))
+		{
+			//Get the Position
+			Vector2 Targetpos = GetViewport().GetMousePosition();// InputEventMouse.position;
+			var angle = DisplayHelper.ScreenCenter.AngleToPoint(Targetpos) ;
+			
+			GD.Print($"Angle {Mathf.RadToDeg(angle)} - {GameManager.PlayerShip.Nozzle} - {GameManager.PlayerShip.NozzleMax} ");
+
+			GameManager.PlayerShip.SetThruster(GameManager.PlayerShip.ThrusterMaxForward);
+			//SetNozzel(angle);
+		}
+		else
+		{
+			GameManager.PlayerShip.SetThruster(0);	
 		}
 		
+		
 	}
-	
+
+	private void SetNozzel(float targetAng)
+	{
+		var direct = GameManager.PlayerShip.Direction;
+		if (targetAng > direct)
+		{
+			GameManager.PlayerShip.SetNozzle(0.01f);
+		}
+		else
+		{
+			GameManager.PlayerShip.SetNozzle(-0.01f);
+		}
+
+
+	}
 	
 	
 

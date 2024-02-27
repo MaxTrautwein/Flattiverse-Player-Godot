@@ -5,16 +5,17 @@ using Flattiverse.Utils;
 
 public partial class PlayerShip : Node2D
 {
-	private Vector2 ScreenSize;
-
-	private Vector2 _ScreenCenter;
-	
 	// Called when the node enters the scene tree for the first time.
 	public override void _Ready()
 	{
-		ScreenSize = GetViewportRect().Size;
-		_ScreenCenter = ScreenSize / 2;
-		DisplayHelper.Screensize = ScreenSize;
+		GetTree().Root.Connect("size_changed", Callable.From(() => updateScreenSize()));
+		updateScreenSize();
+	}
+	
+	public void updateScreenSize()
+	{
+		DisplayHelper.Screensize = GetViewportRect().Size;
+		
 	}
 
 	// Called every frame. 'delta' is the elapsed time since the previous frame.
@@ -23,9 +24,8 @@ public partial class PlayerShip : Node2D
 		if (GameManager.PlayerShip != null)
 		{
 			shipSize = GameManager.PlayerShip.Size;
-			position = GameManager.PlayerShip.Position.toGodot();
 
-			DisplayHelper.PlayerPos = position;
+			DisplayHelper.PlayerPos = GameManager.PlayerShip.Position.toGodot();
 			
 			direction = GameManager.PlayerShip.Direction;
 			
@@ -35,14 +35,13 @@ public partial class PlayerShip : Node2D
 
 	private double direction = 0;
 	private double shipSize = 0;
-	private Vector2 position = Vector2.Zero;
-	
 	public override void _Draw()
 	{
 		base._Draw();
-		DrawCircle(_ScreenCenter, (float)(shipSize * DisplayHelper.Zoom),Colors.Green);
+		DrawCircle(DisplayHelper.TransformToDisplay(DisplayHelper.PlayerPos), (float)(shipSize * DisplayHelper.Zoom),Colors.Green);
 		
 		//Inducate Direction with a Line into the Relevant Direction
+		// Right is 0°
 		//DrawLine(_ScreenCenter);
 
 	}

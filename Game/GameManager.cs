@@ -81,11 +81,15 @@ public static class GameManager
                     game.DeRegisterUnit(_unit);
 
                     break;
-                case EventKind.PlayerAdded:
+                case EventKind.JoinedPlayer:
                     break;
-                case EventKind.PlayerRemoved:
+                case EventKind.PartedPlayer:
                     break;
                 case EventKind.GalaxyTick:
+                    break;
+                case EventKind.JoinedControllable:
+                    break;
+                case EventKind.PartedControllable:
                     break;
                 default:
                     throw new ArgumentOutOfRangeException();
@@ -97,8 +101,8 @@ public static class GameManager
 
     public static async void CreateShip()
     {
-        _PlayerShip = await _galaxy.RegisterShip("MaxShipName", _galaxy.ShipsDesigns["Cruiser"]);
-
+        _PlayerShip = await _galaxy.RegisterShip("MaxShipName2", _galaxy.ShipsDesigns["Cruiser"]);
+        
         GD.Print($"Ship: {_PlayerShip.Name}, maxEnergy={_PlayerShip.Energy}/{_PlayerShip.EnergyMax}");
 
         await _PlayerShip.Continue();
