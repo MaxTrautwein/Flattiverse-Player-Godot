@@ -26,6 +26,7 @@ public partial class PlayerShip : Node2D
 			shipSize = GameManager.PlayerShip.Size;
 
 			DisplayHelper.PlayerPos = GameManager.PlayerShip.Position.toGodot();
+		//	GD.Print($"{GameManager.PlayerShip.Position}");
 			
 			direction = GameManager.PlayerShip.Direction;
 			
@@ -35,14 +36,14 @@ public partial class PlayerShip : Node2D
 
 	private double direction = 0;
 	private double shipSize = 0;
+
+	private float PlayerDispalyRadius => (float)(shipSize * DisplayHelper.Zoom);
 	public override void _Draw()
 	{
 		base._Draw();
-		DrawCircle(DisplayHelper.TransformToDisplay(DisplayHelper.PlayerPos), (float)(shipSize * DisplayHelper.Zoom),Colors.Green);
+		var PlayerPos = DisplayHelper.TransformToDisplay(DisplayHelper.PlayerPos);
+		DrawCircle(PlayerPos, PlayerDispalyRadius,Colors.Green);
 		
-		//Inducate Direction with a Line into the Relevant Direction
-		// Right is 0°
-		//DrawLine(_ScreenCenter);
-
+		DisplayHelper.DrawDirectionIndicator(this,PlayerDispalyRadius,PlayerPos,direction,Colors.Pink);
 	}
 }

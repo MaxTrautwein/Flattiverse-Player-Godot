@@ -26,13 +26,20 @@ public partial class GameObject : Node2D
 		QueueRedraw();
 	}
 
+	protected virtual Color UnitColor => Colors.Red;
+	protected virtual Color TextColor => Colors.White;
+	protected virtual string DisplayString => string.Format($"{_unit.Name}");
+	
+	protected Vector2 GoDotPos => DisplayHelper.TransformToDisplay(_unit.Position.toGodot());
+
 	public override void _Draw()
 	{
 		base._Draw();
-		Vector2 pos = DisplayHelper.TransformToDisplay(_unit.Position.toGodot());
 		
-		DrawCircle(pos, (float)(_unit.Radius * DisplayHelper.Zoom),Colors.Red);
-		DrawString(ThemeDB.FallbackFont,pos,string.Format($"{_unit.Name}"), fontSize: Mathf.CeilToInt(16 * DisplayHelper.Zoom) , modulate: Colors.White );
-
+		DrawCircle(GoDotPos, (float)(_unit.Radius * DisplayHelper.Zoom),UnitColor);
+		
+		DrawMultilineString(ThemeDB.FallbackFont,GoDotPos,DisplayString, fontSize: Mathf.CeilToInt(16 * DisplayHelper.Zoom) , modulate: TextColor );
+		
+		
 	}
 }

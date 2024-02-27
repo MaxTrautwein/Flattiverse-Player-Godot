@@ -101,7 +101,7 @@ public static class GameManager
 
     public static async void CreateShip()
     {
-        _PlayerShip = await _galaxy.RegisterShip("MaxShipName2", _galaxy.ShipsDesigns["Cruiser"]);
+        _PlayerShip = await _galaxy.RegisterShip("MaxShipName4", _galaxy.ShipsDesigns["Cruiser"]);
         
         GD.Print($"Ship: {_PlayerShip.Name}, maxEnergy={_PlayerShip.Energy}/{_PlayerShip.EnergyMax}");
 

@@ -44,4 +44,16 @@ public static class DisplayHelper
         
         return relativePos;
     }
+
+    public static void DrawDirectionIndicator(Node2D drawRef, float UnitRadius, Vector2 UnitPos, double direction,Color drawColor, float baseWidth = 4)
+    {
+        Vector2 dirvect = Vector2.Right * UnitRadius;
+        dirvect = dirvect.Rotated((float)Mathf.DegToRad(direction));
+        dirvect += UnitPos;
+
+        //Inducate Direction with a Line into the Relevant Direction
+        // Right is 0°
+        drawRef.DrawLine(UnitPos,dirvect,drawColor,width: baseWidth * DisplayHelper.Zoom);
+    }
+    
 }
