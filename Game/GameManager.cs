@@ -92,6 +92,12 @@ public static class GameManager
                     break;
                 case EventKind.PartedControllable:
                     break;
+                case EventKind.GalaxyChat:
+                case EventKind.PlayerChat:
+                case EventKind.TeamChat:
+                    hud.RegisterChatMsg((@event as ChatEvent)?.ToString());
+                    
+                    break;
                 default:
                     throw new ArgumentOutOfRangeException();
             }

@@ -1,8 +1,6 @@
-[gd_scene load_steps=4 format=3 uid="uid://bjodovntg4dbd"]
+[gd_scene load_steps=2 format=3 uid="uid://bjodovntg4dbd"]
 
-[ext_resource type="Script" path="res://HUD/StatusBar.cs" id="1_flqkt"]
 [ext_resource type="Script" path="res://HUD/hud.cs" id="1_qgecp"]
-[ext_resource type="Script" path="res://HUD/FPS_Cnt.cs" id="2_lx27n"]
 
 [node name="HUD" type="CanvasLayer"]
 script = ExtResource("1_qgecp")
@@ -16,12 +14,10 @@ offset_top = -23.0
 grow_horizontal = 2
 grow_vertical = 0
 text = "Hull: 100% - Energy: 100% - ..."
-script = ExtResource("1_flqkt")
 
 [node name="FPS_Cnt" type="Label" parent="."]
 offset_right = 40.0
 offset_bottom = 23.0
-script = ExtResource("2_lx27n")
 
 [node name="ChatBox" type="RichTextLabel" parent="."]
 anchors_preset = 1
