@@ -56,4 +56,15 @@ public static class DisplayHelper
         drawRef.DrawLine(UnitPos,dirvect,drawColor,width: baseWidth * DisplayHelper.Zoom);
     }
     
+    public static void DrawSection(Node2D drawRef ,Vector2 pos ,double innerRadius, double outerRadius,double angleFrom, double angleTo, Color color)
+    {
+        var innerRad = (float)innerRadius * DisplayHelper.Zoom;
+        var outerRad =    (float)outerRadius * DisplayHelper.Zoom; 
+        var StartAng = (float)Mathf.DegToRad(angleFrom);
+        var StopAng = (float)Mathf.DegToRad(angleTo);
+        var width = (float)5 * DisplayHelper.Zoom;
+        drawRef.DrawArc(pos,innerRad, StartAng,StopAng,100,color,width);
+        drawRef.DrawArc(pos,outerRad, StartAng,StopAng,100,color,width);
+    }
+    
 }
