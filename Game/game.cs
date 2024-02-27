@@ -81,7 +81,8 @@ public partial class game : Node
 	// Called every frame. 'delta' is the elapsed time since the previous frame.
 	public override void _Process(double delta)
 	{
-
+		if (GameManager.PlayerShip is null) return;
+		
 		if (Input.IsActionJustPressed("ZoomIn"))
 		{
 			DisplayHelper.Zoom *= 1.1f;
