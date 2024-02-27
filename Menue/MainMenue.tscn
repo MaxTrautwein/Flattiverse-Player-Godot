@@ -1,8 +1,6 @@
-[gd_scene load_steps=6 format=3 uid="uid://d0h5ffdu6t1br"]
+[gd_scene load_steps=4 format=3 uid="uid://d0h5ffdu6t1br"]
 
 [ext_resource type="Script" path="res://Menue/MainMenue.cs" id="1_s0igo"]
-[ext_resource type="Script" path="res://Menue/Connect.cs" id="2_ep30k"]
-[ext_resource type="Script" path="res://Menue/InfoBox.cs" id="3_bgt1n"]
 [ext_resource type="Script" path="res://Menue/GalaxiesListBox.cs" id="4_wwu6w"]
 [ext_resource type="Script" path="res://Menue/TeamsListBox.cs" id="5_apj1x"]
 
@@ -32,7 +30,6 @@ offset_top = 728.0
 offset_right = 828.0
 offset_bottom = 774.0
 text = "Connect"
-script = ExtResource("2_ep30k")
 
 [node name="InfoBox" type="RichTextLabel" parent="."]
 layout_mode = 0
@@ -40,8 +37,6 @@ offset_left = 43.0
 offset_top = 59.0
 offset_right = 503.0
 offset_bottom = 295.0
-text = "TODO"
-script = ExtResource("3_bgt1n")
 
 [node name="GalaxiesListBox" type="ItemList" parent="."]
 layout_mode = 0
