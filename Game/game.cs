@@ -88,7 +88,7 @@ public partial class game : Node
 		}
 		if (Input.IsActionJustPressed("ZoomOut"))
 		{
-			DisplayHelper.Zoom *= 0.99f;
+			DisplayHelper.Zoom *= 0.9f;
 		}
 
 		if (Input.IsActionJustPressed("ResetZoom"))
@@ -114,11 +114,36 @@ public partial class game : Node
 
 		if (Input.IsActionPressed("Stabelize"))
 		{
+			StabelizePosition();
 
-			StabelizeTurn();
 		}
 		
 		
+	}
+
+	private void StabelizePosition()
+	{
+		var movement = GameManager.PlayerShip.Movement;
+
+
+		var ang = Mathf.RadToDeg( Vector2.Zero.AngleToPoint(movement.toGodot()));
+			
+		
+		SetNozzel(ang);
+
+		if (CalcDiff((double)ang) < 10)
+		{
+			var speed = GameManager.PlayerShip.Movement.Length;
+			var thruster = 0.02;
+
+			thruster = Mathf.Min(thruster, speed / 5);
+			//GD.Print($"{movement.toGodot()}- in {ang} --> {thruster}");
+			thruster = Mathf.Min(thruster, GameManager.PlayerShip.ThrusterMaxBackward);
+			
+			GameManager.PlayerShip.SetThruster(-thruster);
+		}
+		
+
 	}
 
 	private void StabelizeTurn()
@@ -126,39 +151,69 @@ public partial class game : Node
 		//Try To Stabelize the rotation
 		var turnrate = GameManager.PlayerShip.Turnrate;
 		var nozzelMax = GameManager.PlayerShip.NozzleMax;
-		var stanelizeSpeed = 0;//GameManager.PlayerShip.ThrusterMaxForward / 4;
 
 		var nozzel =  Mathf.Clamp(-turnrate, -nozzelMax,nozzelMax) ;
-
-		GameManager.PlayerShip.SetThrusterNozzle(stanelizeSpeed, nozzel);
+		
+		GameManager.PlayerShip.SetNozzle( nozzel);
 	}
 
+	private double CalcDiff(double target)
+	{
+		//Normalize Target
+		var targetAng = (target + 360) % 360;
+		
+		return targetAng - GameManager.PlayerShip.Direction;
+	}
+	
 	private void SetNozzel(float targetAng)
 	{
-		var direct = GameManager.PlayerShip.Direction;
-		
-		//Normalize Target
-		targetAng = (targetAng + 360) % 360;
-		
-		var diff = targetAng - direct;
+		var diff = CalcDiff(targetAng);
 		var absDiff = Mathf.Abs(diff);
 		if (absDiff >= 180) diff *= -1;
 
 		var NozzelRate = 0.01d;
 		
-		//if ( absDiff  > 20) NozzelRate *= 10f;
-
 		var MaxNozzleRate = GameManager.PlayerShip.NozzleMax * 0.75;
 
 		NozzelRate = MaxNozzleRate / 180 * absDiff;
 		
 		NozzelRate = Mathf.Min(NozzelRate, MaxNozzleRate);
+
+		var turnrate = GameManager.PlayerShip.Turnrate;
+		double turnRateLimit = 10d;
+
+		if (absDiff < 90) turnRateLimit = 8;
+		if (absDiff < 60) turnRateLimit = 5;
+		if (absDiff < 20) turnRateLimit = 5;
+		if (absDiff < 10) turnRateLimit = 2;
+		if (absDiff < 1) turnRateLimit = 1;
+		/*
+		if (absDiff < 1)
+		{
+			StabelizeTurn();
+			GD.Print("Stabelize");
+			return;
+		}*/
+		
+		
 		if (diff > 0)
 		{
+			if (turnrate > turnRateLimit)
+			{
+				var offset = turnRateLimit - turnrate;
+				GameManager.PlayerShip.SetNozzle(offset);
+				return;
+			}
 			GameManager.PlayerShip.SetNozzle(NozzelRate);
 		}
 		else
 		{
+			if (turnrate < -turnRateLimit)
+			{
+				var offset = -turnRateLimit - turnrate;
+				GameManager.PlayerShip.SetNozzle(offset);
+				return;
+			}
 			GameManager.PlayerShip.SetNozzle(-NozzelRate);
 		}
 

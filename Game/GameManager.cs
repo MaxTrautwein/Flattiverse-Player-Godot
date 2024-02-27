@@ -67,6 +67,7 @@ public static class GameManager
                 case EventKind.UnitAdded:
                     _unit = ((UnitEvent)@event).Unit;
                    // knownUnits.Add(_unit);
+                    if (_unit.Name == ShipName && _unit.Kind == UnitKind.PlayerUnit) break;
                     game.RegisterUnit(_unit);
                     GD.Print($"Added {_unit.Name} @{_unit.Position} - {_unit.Radius} - {_unit.Gravity}");
                     break;
@@ -97,11 +98,11 @@ public static class GameManager
             //GD.Print(@event);
         }
     }
-    
 
+    private static string ShipName => "MaxShipName";
     public static async void CreateShip()
     {
-        _PlayerShip = await _galaxy.RegisterShip("MaxShipName4", _galaxy.ShipsDesigns["Cruiser"]);
+        _PlayerShip = await _galaxy.RegisterShip(ShipName, _galaxy.ShipsDesigns["Cruiser"]);
         
         GD.Print($"Ship: {_PlayerShip.Name}, maxEnergy={_PlayerShip.Energy}/{_PlayerShip.EnergyMax}");
 
