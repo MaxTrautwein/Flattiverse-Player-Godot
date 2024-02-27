@@ -30,7 +30,7 @@ public partial class GameObject : Node2D
 	protected virtual Color TextColor => Colors.White;
 	protected virtual string DisplayString => string.Format($"{_unit.Name}");
 	
-	protected Vector2 GoDotPos => DisplayHelper.TransformToDisplay(_unit.Position.toGodot());
+	protected Vector2 GoDotPos => DisplayHelper.TransformToDisplay(_unit.Position.ToGodot());
 
 	public override void _Draw()
 	{

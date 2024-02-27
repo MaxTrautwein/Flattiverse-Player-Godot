@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Threading;
 using Flattiverse;
 using Flattiverse.Connector.MissionSelection;
+using Flattiverse.Game;
 
 public partial class MainMenue : Control
 {
@@ -17,20 +18,20 @@ public partial class MainMenue : Control
 	// Called when the node enters the scene tree for the first time.
 	public override void _Ready()
 	{
-		Thread thread1 = new Thread(GameManager.init);
+		Thread thread1 = new Thread(GameManager.Init);
 		thread1.Start();
 
 		_settingsButton = GetNode<Button>("SettingsButton");
 		_settingsButton.Connect("pressed", Callable.From(() => GetTree().ChangeSceneToFile("res://settings.tscn")));
 
 		_connectButton = GetNode<Button>("Connect");
-		_connectButton.Connect("pressed", Callable.From(() => Connect()));
+		_connectButton.Connect("pressed", Callable.From(Connect));
 
 		_infoBox = GetNode<RichTextLabel>("InfoBox");
 		_galaxiesListBox = GetNode<ItemList>("GalaxiesListBox");
 		_teamsListBox = GetNode<ItemList>("TeamsListBox");
 		
-		GameManager.ApiKey = Settings.ReadAPIKey();
+		GameManager.ApiKey = Settings.ReadApiKey();
 
 	}
 

@@ -20,7 +20,7 @@ public partial class DisplayOtherPlayer : GameObject
     public override void _Draw()
     {
         base._Draw();
-        var pos = DisplayHelper.TransformToDisplay(_playerUnit.Position.toGodot());
+        var pos = DisplayHelper.TransformToDisplay(_playerUnit.Position.ToGodot());
         DisplayHelper.DrawDirectionIndicator(this,(float)_playerUnit.Radius * DisplayHelper.Zoom ,pos,_playerUnit.Direction,Colors.Pink);
     }
     

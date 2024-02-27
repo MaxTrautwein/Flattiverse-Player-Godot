@@ -1,21 +1,20 @@
-using Godot;
-using System;
-using Flattiverse.Connector;
 using Flattiverse.Utils;
+using Godot;
+
+namespace Flattiverse.Game;
 
 public partial class PlayerShip : Node2D
 {
 	// Called when the node enters the scene tree for the first time.
 	public override void _Ready()
 	{
-		GetTree().Root.Connect("size_changed", Callable.From(() => updateScreenSize()));
-		updateScreenSize();
+		GetTree().Root.Connect("size_changed", Callable.From(() => UpdateScreenSize()));
+		UpdateScreenSize();
 	}
-	
-	public void updateScreenSize()
+
+	private void UpdateScreenSize()
 	{
 		DisplayHelper.Screensize = GetViewportRect().Size;
-		
 	}
 
 	// Called every frame. 'delta' is the elapsed time since the previous frame.
@@ -23,27 +22,27 @@ public partial class PlayerShip : Node2D
 	{
 		if (GameManager.PlayerShip != null)
 		{
-			shipSize = GameManager.PlayerShip.Size;
+			_shipSize = GameManager.PlayerShip.Size;
 
-			DisplayHelper.PlayerPos = GameManager.PlayerShip.Position.toGodot();
-		//	GD.Print($"{GameManager.PlayerShip.Position}");
+			DisplayHelper.PlayerPos = GameManager.PlayerShip.Position.ToGodot();
+			//	GD.Print($"{GameManager.PlayerShip.Position}");
 			
-			direction = GameManager.PlayerShip.Direction;
+			_direction = GameManager.PlayerShip.Direction;
 			
 			QueueRedraw();
 		}
 	}
 
-	private double direction = 0;
-	private double shipSize = 0;
+	private double _direction = 0;
+	private double _shipSize = 0;
 
-	private float PlayerDispalyRadius => (float)(shipSize * DisplayHelper.Zoom);
+	private float PlayerDisplayRadius => (float)(_shipSize * DisplayHelper.Zoom);
 	public override void _Draw()
 	{
 		base._Draw();
-		var PlayerPos = DisplayHelper.TransformToDisplay(DisplayHelper.PlayerPos);
-		DrawCircle(PlayerPos, PlayerDispalyRadius,Colors.Green);
+		var playerPos = DisplayHelper.TransformToDisplay(DisplayHelper.PlayerPos);
+		DrawCircle(playerPos, PlayerDisplayRadius,Colors.Green);
 		
-		DisplayHelper.DrawDirectionIndicator(this,PlayerDispalyRadius,PlayerPos,direction,Colors.Pink);
+		DisplayHelper.DrawDirectionIndicator(this,PlayerDisplayRadius,playerPos,_direction,Colors.Pink);
 	}
 }

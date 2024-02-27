@@ -4,67 +4,67 @@ namespace Flattiverse.Utils;
 
 public static class DisplayHelper
 {
-    private static Vector2 screensize;
+    private static Vector2 _screensize;
 
     public static Vector2 Screensize
     {
-        get => screensize;
-        set => screensize = value;
+        get => _screensize;
+        set => _screensize = value;
     }
 
-    public static Vector2 ScreenCenter => screensize / 2;
+    public static Vector2 ScreenCenter => _screensize / 2;
 
-    private static Vector2 playerPos;
+    private static Vector2 _playerPos;
 
     public static Vector2 PlayerPos
     {
-        get => playerPos;
-        set => playerPos = value;
+        get => _playerPos;
+        set => _playerPos = value;
     }
 
 
-    private static float zoom = 1;
+    private static float _zoom = 1;
 
     public static float Zoom
     {
-        get => zoom;
+        get => _zoom;
         set
         {
-            zoom = value;
-            if (zoom <= 0f) zoom = 0.00001f;
+            _zoom = value;
+            if (_zoom <= 0f) _zoom = 0.00001f;
         }
     }
 
 
     
 
-    public static Vector2 TransformToDisplay(Vector2 GamePos)
+    public static Vector2 TransformToDisplay(Vector2 gamePos)
     {
-        var relativePos = (GamePos - PlayerPos) * Zoom + ScreenCenter;
+        var relativePos = (gamePos - PlayerPos) * Zoom + ScreenCenter;
         
         return relativePos;
     }
 
-    public static void DrawDirectionIndicator(Node2D drawRef, float UnitRadius, Vector2 UnitPos, double direction,Color drawColor, float baseWidth = 4)
+    public static void DrawDirectionIndicator(Node2D drawRef, float unitRadius, Vector2 unitPos, double direction,Color drawColor, float baseWidth = 4)
     {
-        Vector2 dirvect = Vector2.Right * UnitRadius;
+        Vector2 dirvect = Vector2.Right * unitRadius;
         dirvect = dirvect.Rotated((float)Mathf.DegToRad(direction));
-        dirvect += UnitPos;
+        dirvect += unitPos;
 
         //Inducate Direction with a Line into the Relevant Direction
         // Right is 0°
-        drawRef.DrawLine(UnitPos,dirvect,drawColor,width: baseWidth * DisplayHelper.Zoom);
+        drawRef.DrawLine(unitPos,dirvect,drawColor,width: baseWidth * DisplayHelper.Zoom);
     }
     
     public static void DrawSection(Node2D drawRef ,Vector2 pos ,double innerRadius, double outerRadius,double angleFrom, double angleTo, Color color)
     {
         var innerRad = (float)innerRadius * DisplayHelper.Zoom;
         var outerRad =    (float)outerRadius * DisplayHelper.Zoom; 
-        var StartAng = (float)Mathf.DegToRad(angleFrom);
-        var StopAng = (float)Mathf.DegToRad(angleTo);
-        var width = (float)5 * DisplayHelper.Zoom;
-        drawRef.DrawArc(pos,innerRad, StartAng,StopAng,100,color,width);
-        drawRef.DrawArc(pos,outerRad, StartAng,StopAng,100,color,width);
+        var startAng = (float)Mathf.DegToRad(angleFrom);
+        var stopAng = (float)Mathf.DegToRad(angleTo);
+        var width = 5 * DisplayHelper.Zoom;
+        drawRef.DrawArc(pos,innerRad, startAng,stopAng,100,color,width);
+        drawRef.DrawArc(pos,outerRad, startAng,stopAng,100,color,width);
     }
     
 }

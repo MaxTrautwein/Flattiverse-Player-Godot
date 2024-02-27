@@ -1,10 +1,5 @@
 using Godot;
-using System;
 using System.Collections.Generic;
-using System.Threading;
-using Flattiverse;
-using Flattiverse.Connector.Hierarchy;
-using Flattiverse.Connector.MissionSelection;
 using Flattiverse.Connector.Units;
 using Flattiverse.Game;
 using Flattiverse.Utils;
@@ -12,14 +7,14 @@ using Flattiverse.Utils;
 
 public partial class game : Node
 {
-	private static game Instance = null;
+	private static game _instance;
 
 	public game()
 	{
-		Instance = this;
+		_instance = this;
 	}
 
-	public override async void _Ready()
+	public override void _Ready()
 	{
 		
 		
@@ -30,9 +25,9 @@ public partial class game : Node
 
 	public static void RegisterUnit(Unit unit)
 	{
-		GD.Print($"Registerd new Unit");
+		GD.Print($"Registered new Unit");
 
-		GameObject newUnit = null;
+		GameObject newUnit;
 
 		switch (unit.Kind)
 		{
@@ -66,17 +61,17 @@ public partial class game : Node
 		
 		
 		
-		displayMap.Add(unit, newUnit);
+		_displayMap.Add(unit, newUnit);
 		
-		Instance.CallDeferred("add_child", newUnit);
+		_instance.CallDeferred("add_child", newUnit);
 		//.AddChild(newUnit);
 	}
 	public static void DeRegisterUnit(Unit unit)
 	{
-		displayMap.Remove(unit);
+		_displayMap.Remove(unit);
 	}
 
-	private static Dictionary<Unit, GameObject> displayMap = new Dictionary<Unit, GameObject>();
+	private static readonly Dictionary<Unit, GameObject> _displayMap = new Dictionary<Unit, GameObject>();
 	
 	// Called every frame. 'delta' is the elapsed time since the previous frame.
 	public override void _Process(double delta)
@@ -99,8 +94,8 @@ public partial class game : Node
 		if (Input.IsActionPressed("MoveToPos"))
 		{
 			//Get the Position
-			Vector2 Targetpos = GetViewport().GetMousePosition();// InputEventMouse.position;
-			var angle = DisplayHelper.ScreenCenter.AngleToPoint(Targetpos) ;
+			Vector2 targetpos = GetViewport().GetMousePosition();// InputEventMouse.position;
+			var angle = DisplayHelper.ScreenCenter.AngleToPoint(targetpos) ;
 			
 			//GD.Print($"Angle {Mathf.RadToDeg(angle)} - {GameManager.PlayerShip.Nozzle} - {GameManager.PlayerShip.NozzleMax} ");
 
@@ -127,12 +122,12 @@ public partial class game : Node
 		var movement = GameManager.PlayerShip.Movement;
 
 
-		var ang = Mathf.RadToDeg( Vector2.Zero.AngleToPoint(movement.toGodot()));
+		var ang = Mathf.RadToDeg( Vector2.Zero.AngleToPoint(movement.ToGodot()));
 			
 		
 		SetNozzel(ang);
 
-		if (CalcDiff((double)ang) < 10)
+		if (CalcDiff(ang) < 10)
 		{
 			var speed = GameManager.PlayerShip.Movement.Length;
 			var thruster = 0.02;
@@ -171,14 +166,12 @@ public partial class game : Node
 		var diff = CalcDiff(targetAng);
 		var absDiff = Mathf.Abs(diff);
 		if (absDiff >= 180) diff *= -1;
-
-		var NozzelRate = 0.01d;
 		
-		var MaxNozzleRate = GameManager.PlayerShip.NozzleMax * 0.75;
+		var maxNozzleRate = GameManager.PlayerShip.NozzleMax * 0.75;
 
-		NozzelRate = MaxNozzleRate / 180 * absDiff;
+		double nozzelRate = maxNozzleRate / 180 * absDiff;
 		
-		NozzelRate = Mathf.Min(NozzelRate, MaxNozzleRate);
+		nozzelRate = Mathf.Min(nozzelRate, maxNozzleRate);
 
 		var turnrate = GameManager.PlayerShip.Turnrate;
 		double turnRateLimit = 10d;
@@ -205,7 +198,7 @@ public partial class game : Node
 				GameManager.PlayerShip.SetNozzle(offset);
 				return;
 			}
-			GameManager.PlayerShip.SetNozzle(NozzelRate);
+			GameManager.PlayerShip.SetNozzle(nozzelRate);
 		}
 		else
 		{
@@ -215,7 +208,7 @@ public partial class game : Node
 				GameManager.PlayerShip.SetNozzle(offset);
 				return;
 			}
-			GameManager.PlayerShip.SetNozzle(-NozzelRate);
+			GameManager.PlayerShip.SetNozzle(-nozzelRate);
 		}
 
 

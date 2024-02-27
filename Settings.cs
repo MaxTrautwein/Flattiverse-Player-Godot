@@ -9,7 +9,7 @@ public partial class Settings : Control
 
 	private const string SaveFilePath = "user://settings.data";
 
-	public static string ReadAPIKey()
+	public static string ReadApiKey()
 	{
 		var file = FileAccess.Open(SaveFilePath, FileAccess.ModeFlags.Read);
 		var key = file.GetLine();
@@ -23,12 +23,12 @@ public partial class Settings : Control
 	{
 		_apiKeyLine = GetNode<LineEdit>("APIKey_Line");
 		_saveButton = GetNode<Button>("SaveButton");
-		_saveButton.Connect("pressed", Callable.From(() => Save()));
+		_saveButton.Connect("pressed", Callable.From(Save));
 		
-		_apiKeyLine.Text = ReadAPIKey();
+		_apiKeyLine.Text = ReadApiKey();
 	}
 
-	public void Save()
+	private void Save()
 	{
 		var file = FileAccess.Open(SaveFilePath, FileAccess.ModeFlags.Write);
 		file.StoreString(_apiKeyLine.Text);

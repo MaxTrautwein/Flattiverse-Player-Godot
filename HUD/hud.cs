@@ -1,6 +1,7 @@
 using Godot;
 using System;
 using System.Collections.Generic;
+using Flattiverse.Game;
 
 public partial class hud : CanvasLayer
 {
@@ -38,11 +39,11 @@ public partial class hud : CanvasLayer
 		if (GameManager.PlayerShip != null)
 		{
 			var ship = GameManager.PlayerShip;
-			var Hull = FormatPercentage("Hull", ship.Hull, ship.HullMax);
-			var Energy = FormatPercentage("Energy", ship.Energy, ship.EnergyMax);
-			var Shields = FormatPercentage("Shields", ship.Shields, ship.ShieldsMax);
+			var hull = FormatPercentage("Hull", ship.Hull, ship.HullMax);
+			var energy = FormatPercentage("Energy", ship.Energy, ship.EnergyMax);
+			var shields = FormatPercentage("Shields", ship.Shields, ship.ShieldsMax);
 			
-			_statusLine.Text = string.Format($"{Hull}- {Energy}- {Shields}- dir={ship.Direction:F}, Thrust={ship.Thruster:0.0000}, Nozzel={ship.Nozzle:F}, TURNRATE={ship.Turnrate:F}, SPEED={ship.Movement.Length}"); 
+			_statusLine.Text = string.Format($"{hull}- {energy}- {shields}- dir={ship.Direction:F}, Thrust={ship.Thruster:0.0000}, Nozzel={ship.Nozzle:F}, TURNRATE={ship.Turnrate:F}, SPEED={ship.Movement.Length}"); 
 		}
 
 

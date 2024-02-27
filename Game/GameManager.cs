@@ -8,27 +8,28 @@ using Flattiverse.Connector.MissionSelection;
 using Flattiverse.Connector.Units;
 using Godot;
 
+namespace Flattiverse.Game;
+
 public static class GameManager
 {
 
-    private static Galaxy _galaxy = null;
-    private static Universe _universe = null;
-    private static Controllable _PlayerShip = null;
+    private static Galaxy _galaxy;
+    private static Universe _universe;
+    private static Controllable _playerShip;
 
-    public static Controllable PlayerShip => _PlayerShip;
+    public static Controllable PlayerShip => _playerShip;
     public static Galaxy Galaxy => _galaxy;
     public static Universe Universe => _universe;
-    public static async void init()
+    public static void Init()
     {
-        _universe = new Universe();
-        //GD.Print($"Connected to {_galaxy.Name}");
+        _universe = new Universe(); 
     }
 
-    private static List<Unit> knownUnits = new List<Unit>();
+    private static List<Unit> _knownUnits = new List<Unit>();
     private static string _galaxyName = "Beginners Course";
     private static string _teamName = "Plebs";
 
-    private static Player MyPlayer = null;
+    private static Player _myPlayer;
     public static string GalaxyName
     {
         get => _galaxyName;
@@ -45,41 +46,38 @@ public static class GameManager
         var targetGalaxy = _universe.Galaxies[_galaxyName];
         
         GD.Print($"Connecting to '{_galaxyName}' and Team '{_teamName}'");
-        _galaxy = await targetGalaxy.Join(apiKey, targetGalaxy.Teams[_teamName]);
+        _galaxy = await targetGalaxy.Join(_apiKey, targetGalaxy.Teams[_teamName]);
         
-        var Players = _galaxy.Players;
-        foreach (var player in Players)
+        var players = _galaxy.Players;
+        foreach (var player in players)
         {
             GD.Print($"Player: {player.Name} in {player.Team.Name}");
         }
 
         //_galaxy.
         CreateShip();
-        MyPlayer = _galaxy.Players.First(P => P.Name == "matrit07");
+        _myPlayer = _galaxy.Players.First(p => p.Name == "matrit07");
         
         
         while (true)
         {
             FlattiverseEvent @event = await _galaxy.NextEvent();
-            Unit _unit = null;
+            Unit unit = null;
             switch (@event.Kind)
             {
                 case EventKind.UnitAdded:
-                    _unit = ((UnitEvent)@event).Unit;
-                   // knownUnits.Add(_unit);
-                    if (_unit.Name == ShipName && _unit.Kind == UnitKind.PlayerUnit) break;
-                    game.RegisterUnit(_unit);
-                    GD.Print($"Added {_unit.Name} @{_unit.Position} - {_unit.Radius} - {_unit.Gravity}");
+                    unit = ((UnitEvent)@event).Unit;
+                    // knownUnits.Add(_unit);
+                    if (unit.Name == ShipName && unit.Kind == UnitKind.PlayerUnit) break;
+                    game.RegisterUnit(unit);
+                    GD.Print($"Added {unit.Name} @{unit.Position} - {unit.Radius} - {unit.Gravity}");
                     break;
                 case EventKind.UnitUpdated:
-                    _unit = ((UnitEvent)@event).Unit;
-                    //GD.Print($"{_unit.Name} @{_unit.Position}");
-                    //From what i understood the logic for is is handeled automaticlly
                     break;
                 case EventKind.UnitVanished:
-                    _unit = ((UnitEvent)@event).Unit;
+                    unit = ((UnitEvent)@event).Unit;
                     //knownUnits.Remove(_unit);
-                    game.DeRegisterUnit(_unit);
+                    game.DeRegisterUnit(unit);
 
                     break;
                 case EventKind.JoinedPlayer:
@@ -106,13 +104,14 @@ public static class GameManager
     }
 
     private static string ShipName => "MaxShipName";
-    public static async void CreateShip()
-    {
-        _PlayerShip = await _galaxy.RegisterShip(ShipName, _galaxy.ShipsDesigns["Cruiser"]);
-        
-        GD.Print($"Ship: {_PlayerShip.Name}, maxEnergy={_PlayerShip.Energy}/{_PlayerShip.EnergyMax}");
 
-        await _PlayerShip.Continue();
+    private static async void CreateShip()
+    {
+        _playerShip = await _galaxy.RegisterShip(ShipName, _galaxy.ShipsDesigns["Cruiser"]);
+        
+        GD.Print($"Ship: {_playerShip.Name}, maxEnergy={_playerShip.Energy}/{_playerShip.EnergyMax}");
+
+        await _playerShip.Continue();
         
         
     }
@@ -120,10 +119,10 @@ public static class GameManager
  
     
     
-    private static string apiKey = "SetMe";
+    private static string _apiKey = "SetMe";
     public static string ApiKey
     {
-        set => apiKey = value;
+        set => _apiKey = value;
     }
 
 }

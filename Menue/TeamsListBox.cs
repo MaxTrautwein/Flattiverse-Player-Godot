@@ -2,6 +2,7 @@ using Godot;
 using System;
 using System.Collections.Generic;
 using Flattiverse.Connector.MissionSelection;
+using Flattiverse.Game;
 
 public partial class TeamsListBox : ItemList
 {
