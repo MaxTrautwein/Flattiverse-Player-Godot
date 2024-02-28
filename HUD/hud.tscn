@@ -80,3 +80,11 @@ offset_bottom = -25.0
 grow_horizontal = 2
 grow_vertical = 0
 text = "Hello World"
+
+[node name="ThrustSlider" type="VSlider" parent="."]
+offset_left = 8.0
+offset_top = 384.0
+offset_right = 32.0
+offset_bottom = 704.0
+tooltip_text = "Desierd Thrust"
+allow_lesser = true

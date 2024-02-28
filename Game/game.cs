@@ -69,6 +69,7 @@ public partial class game : Node
 	}
 
 	private static readonly Dictionary<Unit, GameObject> _displayMap = new Dictionary<Unit, GameObject>();
+	private static List<MovementMarker> _movementMarkers = new List<MovementMarker>();
 	
 	// Called every frame. 'delta' is the elapsed time since the previous frame.
 
@@ -93,8 +94,17 @@ public partial class game : Node
 		if (GameManager.PlayerShip is null) return;
 
 		ZoomHandler();
-		
-		if (Input.IsActionPressed("MoveToPos"))
+
+		if (Input.IsActionJustPressed("MoveToPos"))
+		{
+			var pos = DisplayHelper.TransformToGamePos(DisplayHelper.MouseDisplayPos(this));
+			MovementMarker marker = new MovementMarker(pos);
+			_movementMarkers.Add(marker);
+			
+			GD.Print($"Set Marker @{pos}");
+			_instance.CallDeferred("add_child", marker);
+		}
+		else if (Input.IsActionPressed("MoveInDirection"))
 		{
 			//Get the Position
 			Vector2 targetpos = GetViewport().GetMousePosition();// InputEventMouse.position;
