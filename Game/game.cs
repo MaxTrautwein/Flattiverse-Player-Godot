@@ -17,12 +17,10 @@ public partial class game : Node
 
 	public override void _Ready()
 	{
-		_nozzelControl = new Pid_Controller(0.1, 0, -0.3, 0);
-		
-
+		_nozzelControl = new PidController(0.1, 0, -0.3, 0);
 	}
 
-	public Pid_Controller NozzelControl => _nozzelControl;
+	public PidController NozzelControl => _nozzelControl;
 
 	
 
@@ -61,13 +59,9 @@ public partial class game : Node
 		}
 		
 		
-		
-		
-		
 		_displayMap.Add(unit, newUnit);
 		
 		_instance.CallDeferred("add_child", newUnit);
-		//.AddChild(newUnit);
 	}
 	public static void DeRegisterUnit(Unit unit)
 	{
@@ -77,10 +71,9 @@ public partial class game : Node
 	private static readonly Dictionary<Unit, GameObject> _displayMap = new Dictionary<Unit, GameObject>();
 	
 	// Called every frame. 'delta' is the elapsed time since the previous frame.
-	public override void _Process(double delta)
+
+	private void ZoomHandler()
 	{
-		if (GameManager.PlayerShip is null) return;
-		
 		if (Input.IsActionJustPressed("ZoomIn"))
 		{
 			DisplayHelper.Zoom *= 1.1f;
@@ -89,19 +82,24 @@ public partial class game : Node
 		{
 			DisplayHelper.Zoom *= 0.9f;
 		}
-
 		if (Input.IsActionJustPressed("ResetZoom"))
 		{
 			DisplayHelper.Zoom = 1f;
 		}
+	}
+	
+	public override void _Process(double delta)
+	{
+		if (GameManager.PlayerShip is null) return;
+
+		ZoomHandler();
+		
 		if (Input.IsActionPressed("MoveToPos"))
 		{
 			//Get the Position
 			Vector2 targetpos = GetViewport().GetMousePosition();// InputEventMouse.position;
 			var angle = DisplayHelper.ScreenCenter.AngleToPoint(targetpos) ;
 			
-			//GD.Print($"Angle {Mathf.RadToDeg(angle)} - {GameManager.PlayerShip.Nozzle} - {GameManager.PlayerShip.NozzleMax} ");
-
 			GameManager.PlayerShip.SetThruster(GameManager.PlayerShip.ThrusterMaxForward);
 			SetNozzel(Mathf.RadToDeg(angle),delta);
 		}
@@ -114,7 +112,6 @@ public partial class game : Node
 		if (Input.IsActionPressed("Stabelize"))
 		{
 			StabelizePosition(delta);
-
 		}
 		
 		
@@ -195,79 +192,8 @@ public partial class game : Node
 		
 		return targetAng - GameManager.PlayerShip.Direction;
 	}
-
-	public class Pid_Controller
-	{
-		private double _errorPrior;
-		private double _integralPrior;
-		private double _kp;
-		public double Kp
-		{
-			get => _kp;
-			set => _kp = value;
-		}
-		
-		private double _ki;
-		public double Ki
-		{
-			get => _ki;
-			set => _ki = value;
-		}
-		
-		private double _kd;
-		public double Kd
-		{
-			get => _kd;
-			set => _kd = value;
-		}
-		
-		private double _bias;
-		public double Bias
-		{
-			get => _bias;
-			set => _bias = value;
-		}
-		
-		
-		public Pid_Controller(double kp,double ki,double kd, double bias)
-		{
-			_errorPrior = 0;
-			_integralPrior = 0;
-			_kp =  kp; //Some value you need to come up (see tuning section below)
-			_ki =  ki; //Some value you need to come up (see tuning section below)
-			_kd =  kd; //Some value you need to come up (see tuning section below)
-			_bias = bias; // (see below)
-		}
-
-		// This function normalizes the angle so it returns a value between -180° and 180° instead of 0° to 360°.
-		public double angleWrap(double radians) {
-			while (radians > Mathf.Pi) {
-				radians -= 2 * Mathf.Pi;
-			}
-			while (radians < -Mathf.Pi) {
-				radians += 2 * Mathf.Pi;
-			}
-
-			// keep in mind that the result is in radians
-			return radians;
-		}
-
-		
-		public double Control(double timeDelta,double desired_value, double actual_value, double turnrate)
-		{
-
-			var error = Mathf.RadToDeg(angleWrap(Mathf.DegToRad(desired_value - actual_value)));//desired_value - actual_value;
-			var integral = _integralPrior + error * timeDelta;
-			var derivative = turnrate; //(error - _errorPrior) / timeDelta;
-			_errorPrior = error;
-			_integralPrior = integral;
-			return _kp * error + _ki * integral + _kd * derivative + _bias;
-		}
-
-	}
-
-
-	private Pid_Controller _nozzelControl;
+	
+	private PidController _nozzelControl;
 	
 
 	private void SetNozzel(float targetAng,double deltaT)
@@ -280,8 +206,5 @@ public partial class game : Node
 		outval = Mathf.Clamp(outval, -GameManager.PlayerShip.NozzleMax, GameManager.PlayerShip.NozzleMax);
 		GameManager.PlayerShip.SetNozzle(outval);
 	}
-	
-	
-
 	
 }
