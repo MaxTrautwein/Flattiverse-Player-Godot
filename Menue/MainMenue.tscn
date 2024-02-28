@@ -1,8 +1,6 @@
-[gd_scene load_steps=4 format=3 uid="uid://d0h5ffdu6t1br"]
+[gd_scene load_steps=2 format=3 uid="uid://d0h5ffdu6t1br"]
 
 [ext_resource type="Script" path="res://Menue/MainMenue.cs" id="1_s0igo"]
-[ext_resource type="Script" path="res://Menue/GalaxiesListBox.cs" id="4_wwu6w"]
-[ext_resource type="Script" path="res://Menue/TeamsListBox.cs" id="5_apj1x"]
 
 [node name="MainMenue" type="Control"]
 layout_mode = 3
@@ -44,7 +42,6 @@ offset_left = 954.0
 offset_top = 24.0
 offset_right = 1164.0
 offset_bottom = 186.0
-script = ExtResource("4_wwu6w")
 
 [node name="TeamsListBox" type="ItemList" parent="."]
 layout_mode = 0
@@ -52,7 +49,6 @@ offset_left = 954.0
 offset_top = 216.0
 offset_right = 1163.0
 offset_bottom = 320.0
-script = ExtResource("5_apj1x")
 
 [node name="SettingsButton" type="Button" parent="."]
 layout_mode = 0

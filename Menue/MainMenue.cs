@@ -1,6 +1,7 @@
 using Godot;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading;
 using Flattiverse;
 using Flattiverse.Connector.MissionSelection;
@@ -48,6 +49,55 @@ public partial class MainMenue : Control
 	{
 		RenderInfoBox();
 
+		ListBoxManager();
+	}
+
+
+	private Dictionary<string, List<string>> _galaxyTeams = new Dictionary<string, List<string>>();
+	
+	private bool _initDone = false;
+	private int _lastGalaxyIndex = -1;
+	private int _lastTeamIndex = -1;
+	private void ListBoxManager()
+	{
+		if (GameManager.Universe != null && !_initDone)
+		{
+			_initDone = true;
+			foreach (KeyValuePair<string, GalaxyInfo> gInfo in GameManager.Universe.Galaxies)
+			{
+				_galaxiesListBox.AddItem(string.Format($"{gInfo.Key}"));
+				_galaxyTeams.Add(gInfo.Key,new List<string>());
+				foreach (KeyValuePair<string, TeamInfo> tInfo in gInfo.Value.Teams)
+					_galaxyTeams[gInfo.Key].Add(tInfo.Key);
+			}
+
+			_galaxiesListBox.Select(0);
+		}else if (_initDone && _galaxiesListBox.GetSelectedItems().Length > 0)
+		{
+			var indx = _galaxiesListBox.GetSelectedItems()[0];
+
+			if (_lastGalaxyIndex != indx)
+			{
+				GameManager.GalaxyName = _galaxiesListBox.GetItemText(indx);
+				GD.Print($"Selected: {GameManager.GalaxyName}");
+				_lastGalaxyIndex = indx;
+				
+				_teamsListBox.Clear();
+				foreach (var galaxy in _galaxyTeams[GameManager.GalaxyName])
+				{
+					_teamsListBox.AddItem(galaxy);
+				}
+				_teamsListBox.Select(0);
+				_lastTeamIndex = -1;
+			}
+		}
+
+		if (_initDone && _teamsListBox.GetSelectedItems().Length > 0 &&
+		    _lastTeamIndex != _teamsListBox.GetSelectedItems()[0])
+		{
+			_lastTeamIndex = _teamsListBox.GetSelectedItems()[0];
+			GameManager.TeamName = _teamsListBox.GetItemText(_lastTeamIndex);
+		}
 	}
 
 	private void RenderInfoBox()

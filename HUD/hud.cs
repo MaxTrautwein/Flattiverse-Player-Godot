@@ -10,6 +10,11 @@ public partial class hud : CanvasLayer
 	private Label _fpsDisplay;
 	private Label _statusLine;
 	private RichTextLabel _chatBox;
+
+	private SpinBox _kp;
+	private SpinBox _ki;
+	private SpinBox _kd;
+	private SpinBox _bias;
 	
 	// Called when the node enters the scene tree for the first time.
 	public override void _Ready()
@@ -18,6 +23,11 @@ public partial class hud : CanvasLayer
 		_fpsDisplay = GetNode<Label>("FPS_Cnt");
 		_statusLine = GetNode<Label>("StatusBar");
 		_chatBox = GetNode<RichTextLabel>("ChatBox");
+
+		_kp = GetNode<SpinBox>("SpinBoxKP");
+		_ki = GetNode<SpinBox>("SpinBoxKI");
+		_kd = GetNode<SpinBox>("SpinBoxKD");
+		_bias = GetNode<SpinBox>("SpinBoxBias");
 	}
 
 	private string FormatPercentage(string name, double value, double valueMax)
@@ -58,7 +68,14 @@ public partial class hud : CanvasLayer
 			_chatBox.Text += msg + "\n";
 		}
 		NewMsgs.Clear();
+
+		var nozzelControl = game.GetInstance.NozzelControl;
+		nozzelControl.Ki = _ki.Value;
+		nozzelControl.Kp = _kp.Value;
+		nozzelControl.Kd = _kd.Value;
+		nozzelControl.Bias = _bias.Value;
 		
-		
+
+
 	}
 }
