@@ -65,6 +65,8 @@ public partial class game : Node
 	}
 	public static void DeRegisterUnit(Unit unit)
 	{
+		//Todo need to test if this work like i think
+		_instance.CallDeferred("RemoveChild", _displayMap[unit]);
 		_displayMap.Remove(unit);
 	}
 
@@ -122,6 +124,13 @@ public partial class game : Node
 		if (Input.IsActionPressed("Stabelize"))
 		{
 			StabelizePosition(delta);
+
+			foreach (var marker in _movementMarkers)
+			{
+				RemoveChild(marker);
+			}
+			_movementMarkers.RemoveAll((e) => true);
+			
 		}
 		
 		
