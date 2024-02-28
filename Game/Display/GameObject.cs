@@ -14,6 +14,7 @@ public partial class GameObject : Node2D
 	public GameObject(Unit unit)
 	{
 		_unit = unit;
+		
 	}
 
 	public override void _Ready()

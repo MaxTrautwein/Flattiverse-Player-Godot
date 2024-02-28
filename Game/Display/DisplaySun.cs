@@ -11,6 +11,7 @@ public partial class DisplaySun : DisplayCelestialBody
     public DisplaySun(Unit unit) : base(unit)
     {
         _sun = unit as Sun;
+        //GD.Print($"{_sun.Name} -> {_sun.Position}");
     }
 
     protected override Color TextColor { get => Colors.Black; }

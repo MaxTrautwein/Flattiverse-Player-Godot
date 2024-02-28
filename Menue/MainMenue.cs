@@ -93,7 +93,7 @@ public partial class MainMenue : Control
 		}
 
 		if (_initDone && _teamsListBox.GetSelectedItems().Length > 0 &&
-		    _lastTeamIndex != _teamsListBox.GetSelectedItems()[0])
+			_lastTeamIndex != _teamsListBox.GetSelectedItems()[0])
 		{
 			_lastTeamIndex = _teamsListBox.GetSelectedItems()[0];
 			GameManager.TeamName = _teamsListBox.GetItemText(_lastTeamIndex);

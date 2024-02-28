@@ -1,3 +1,4 @@
+using System;
 using Godot;
 using System.Collections.Generic;
 using Flattiverse.Connector.Units;
@@ -8,7 +9,7 @@ using Flattiverse.Utils;
 public partial class game : Node
 {
 	private static game _instance;
-
+	public static game GetInstance => _instance;
 	public game()
 	{
 		_instance = this;
@@ -16,10 +17,12 @@ public partial class game : Node
 
 	public override void _Ready()
 	{
+		_nozzelControl = new Pid_Controller(0.1, 0, -0.3, 0);
 		
-		
-		
+
 	}
+
+	public Pid_Controller NozzelControl => _nozzelControl;
 
 	
 
@@ -100,7 +103,7 @@ public partial class game : Node
 			//GD.Print($"Angle {Mathf.RadToDeg(angle)} - {GameManager.PlayerShip.Nozzle} - {GameManager.PlayerShip.NozzleMax} ");
 
 			GameManager.PlayerShip.SetThruster(GameManager.PlayerShip.ThrusterMaxForward);
-			SetNozzel(Mathf.RadToDeg(angle));
+			SetNozzel(Mathf.RadToDeg(angle),delta);
 		}
 		else
 		{
@@ -110,14 +113,14 @@ public partial class game : Node
 
 		if (Input.IsActionPressed("Stabelize"))
 		{
-			StabelizePosition();
+			StabelizePosition(delta);
 
 		}
 		
 		
 	}
 
-	private void StabelizePosition()
+	private void StabelizePosition(double deltaT)
 	{
 		var movement = GameManager.PlayerShip.Movement;
 
@@ -125,7 +128,7 @@ public partial class game : Node
 		var ang = Mathf.RadToDeg( Vector2.Zero.AngleToPoint(movement.ToGodot()));
 			
 		
-		SetNozzel(ang);
+		SetNozzel(ang, deltaT);
 
 		if (CalcDiff(ang) < 10)
 		{
@@ -160,58 +163,90 @@ public partial class game : Node
 		
 		return targetAng - GameManager.PlayerShip.Direction;
 	}
-	
-	private void SetNozzel(float targetAng)
+
+	public class Pid_Controller
 	{
-		var diff = CalcDiff(targetAng);
-		var absDiff = Mathf.Abs(diff);
-		if (absDiff >= 180) diff *= -1;
-		
-		var maxNozzleRate = GameManager.PlayerShip.NozzleMax * 0.75;
-
-		double nozzelRate = maxNozzleRate / 180 * absDiff;
-		
-		nozzelRate = Mathf.Min(nozzelRate, maxNozzleRate);
-
-		var turnrate = GameManager.PlayerShip.Turnrate;
-		double turnRateLimit = 10d;
-
-		if (absDiff < 90) turnRateLimit = 8;
-		if (absDiff < 60) turnRateLimit = 5;
-		if (absDiff < 20) turnRateLimit = 5;
-		if (absDiff < 10) turnRateLimit = 2;
-		if (absDiff < 1) turnRateLimit = 1;
-		/*
-		if (absDiff < 1)
+		private double _errorPrior;
+		private double _integralPrior;
+		private double _kp;
+		public double Kp
 		{
-			StabelizeTurn();
-			GD.Print("Stabelize");
-			return;
-		}*/
-		
-		
-		if (diff > 0)
-		{
-			if (turnrate > turnRateLimit)
-			{
-				var offset = turnRateLimit - turnrate;
-				GameManager.PlayerShip.SetNozzle(offset);
-				return;
-			}
-			GameManager.PlayerShip.SetNozzle(nozzelRate);
+			get => _kp;
+			set => _kp = value;
 		}
-		else
+		
+		private double _ki;
+		public double Ki
 		{
-			if (turnrate < -turnRateLimit)
-			{
-				var offset = -turnRateLimit - turnrate;
-				GameManager.PlayerShip.SetNozzle(offset);
-				return;
-			}
-			GameManager.PlayerShip.SetNozzle(-nozzelRate);
+			get => _ki;
+			set => _ki = value;
+		}
+		
+		private double _kd;
+		public double Kd
+		{
+			get => _kd;
+			set => _kd = value;
+		}
+		
+		private double _bias;
+		public double Bias
+		{
+			get => _bias;
+			set => _bias = value;
+		}
+		
+		
+		public Pid_Controller(double kp,double ki,double kd, double bias)
+		{
+			_errorPrior = 0;
+			_integralPrior = 0;
+			_kp =  kp; //Some value you need to come up (see tuning section below)
+			_ki =  ki; //Some value you need to come up (see tuning section below)
+			_kd =  kd; //Some value you need to come up (see tuning section below)
+			_bias = bias; // (see below)
 		}
 
+		// This function normalizes the angle so it returns a value between -180° and 180° instead of 0° to 360°.
+		public double angleWrap(double radians) {
+			while (radians > Mathf.Pi) {
+				radians -= 2 * Mathf.Pi;
+			}
+			while (radians < -Mathf.Pi) {
+				radians += 2 * Mathf.Pi;
+			}
 
+			// keep in mind that the result is in radians
+			return radians;
+		}
+
+		
+		public double Control(double timeDelta,double desired_value, double actual_value, double turnrate)
+		{
+
+			var error = Mathf.RadToDeg(angleWrap(Mathf.DegToRad(desired_value - actual_value)));//desired_value - actual_value;
+			var integral = _integralPrior + error * timeDelta;
+			var derivative = turnrate; //(error - _errorPrior) / timeDelta;
+			_errorPrior = error;
+			_integralPrior = integral;
+			return _kp * error + _ki * integral + _kd * derivative + _bias;
+		}
+
+	}
+
+
+	private Pid_Controller _nozzelControl;
+	
+
+	private void SetNozzel(float targetAng,double deltaT)
+	{
+		targetAng = (targetAng + 360) % 360;
+		
+		var outval = _nozzelControl.Control(deltaT, targetAng, GameManager.PlayerShip.Direction, GameManager.PlayerShip.Turnrate);
+		
+		//GD.Print($"PID: target:{targetAng} - actual:{GameManager.PlayerShip.Direction} --> {outval}");
+		outval = Mathf.Clamp(outval, -GameManager.PlayerShip.NozzleMax, GameManager.PlayerShip.NozzleMax);
+		GameManager.PlayerShip.SetNozzle(outval);
 	}
 	
 	
