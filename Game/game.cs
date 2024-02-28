@@ -120,14 +120,8 @@ public partial class game : Node
 		
 	}
 
-	private void StabelizePosition(double deltaT)
+	private void StabelizePositionReverse(double deltaT, float ang)
 	{
-		var movement = GameManager.PlayerShip.Movement;
-
-
-		var ang = Mathf.RadToDeg( Vector2.Zero.AngleToPoint(movement.ToGodot()));
-			
-		
 		SetNozzel(ang, deltaT);
 
 		if (CalcDiff(ang) < 10)
@@ -141,7 +135,45 @@ public partial class game : Node
 			
 			GameManager.PlayerShip.SetThruster(-thruster);
 		}
+	}
+
+	//TODO Check somthing is broken here
+	private void StabelizePositionForward(double deltaT, float ang)
+	{
+		SetNozzel(ang + 180, deltaT);
+
+		if (CalcDiff(ang) < 10)
+		{
+			var speed = GameManager.PlayerShip.Movement.Length;
+			var thruster = 0.02;
+
+			thruster = speed / 5;
+			
+			thruster = Mathf.Min(thruster, GameManager.PlayerShip.ThrusterMaxForward);
+			
+			
+			GameManager.PlayerShip.SetThruster(thruster);
+		}
+	}
+	
+	private void StabelizePosition(double deltaT)
+	{
+		var movement = GameManager.PlayerShip.Movement;
+
+
+		var ang = Mathf.RadToDeg( Vector2.Zero.AngleToPoint(movement.ToGodot()));
+
+		if (movement.Length > 0.5)
+		{
+			//	StabelizePositionForward(deltaT, ang);
+			StabelizePositionReverse(deltaT, ang);
+		}
+		else
+		{
+			StabelizePositionReverse(deltaT, ang);
+		}
 		
+
 
 	}
 

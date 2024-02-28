@@ -2,6 +2,7 @@ using Godot;
 using System;
 using System.Collections.Generic;
 using Flattiverse.Game;
+using Flattiverse.Utils;
 
 public partial class hud : CanvasLayer
 {
@@ -9,6 +10,7 @@ public partial class hud : CanvasLayer
 	private LineEdit _chatMsgLine;
 	private Label _fpsDisplay;
 	private Label _statusLine;
+	private Label _positionInfo;
 	private RichTextLabel _chatBox;
 
 	private bool _usePidSettings = false;
@@ -24,6 +26,7 @@ public partial class hud : CanvasLayer
 		_chatMsgLine = GetNode<LineEdit>("ChatLine");
 		_fpsDisplay = GetNode<Label>("FPS_Cnt");
 		_statusLine = GetNode<Label>("StatusBar");
+		_positionInfo = GetNode<Label>("PositionInfo");
 		_chatBox = GetNode<RichTextLabel>("ChatBox");
 
 		_kp = GetNode<SpinBox>("SpinBoxKP");
@@ -38,7 +41,6 @@ public partial class hud : CanvasLayer
 			_bias.Hide();
 		}
 	}
-
 	private string FormatPercentage(string name, double value, double valueMax)
 	{
 		return string.Format($"{name}: {value / valueMax:P2}% ");
@@ -63,6 +65,10 @@ public partial class hud : CanvasLayer
 			var shields = FormatPercentage("Shields", ship.Shields, ship.ShieldsMax);
 			
 			_statusLine.Text = string.Format($"{hull}- {energy}- {shields}- dir={ship.Direction:F}, Thrust={ship.Thruster:0.0000}, Nozzel={ship.Nozzle:F}, TURNRATE={ship.Turnrate:F}, SPEED={ship.Movement.Length}"); 
+			
+			
+			_positionInfo.Text = string.Format($"Pos: {ship.Position.ToString()} ---{DisplayHelper.TransformToGamePos( DisplayHelper.MouseDisplayPos(this))} ");
+			
 		}
 
 
@@ -77,6 +83,8 @@ public partial class hud : CanvasLayer
 			_chatBox.Text += msg + "\n";
 		}
 		NewMsgs.Clear();
+
+		
 
 		//UpdatePID();
 	}

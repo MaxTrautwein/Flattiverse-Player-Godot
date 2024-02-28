@@ -37,12 +37,37 @@ public static class DisplayHelper
 
 
     
-
+    /// <summary>
+    /// Transforms a Game Position to one on the Screen
+    /// </summary>
+    /// <param name="gamePos"></param>
+    /// <returns></returns>
     public static Vector2 TransformToDisplay(Vector2 gamePos)
     {
         var relativePos = (gamePos - PlayerPos) * Zoom + ScreenCenter;
         
         return relativePos;
+    }
+    /// <summary>
+    /// Gets the Displayed Mouse Position
+    /// </summary>
+    /// <param name="viewRef"></param>
+    /// <returns></returns>
+    public static Vector2 MouseDisplayPos(Node viewRef)
+    {
+        return viewRef.GetViewport().GetMousePosition();
+    }
+    
+    /// <summary>
+    /// Transforms a display Position to the Actual Position ingame
+    /// </summary>
+    /// <param name="displayPos"></param>
+    /// <returns></returns>
+    public static Vector2 TransformToGamePos(Vector2 displayPos)
+    {
+        Vector2 target = ((displayPos - ScreenCenter ) / _zoom) + _playerPos;
+
+        return target;
     }
 
     public static void DrawDirectionIndicator(Node2D drawRef, float unitRadius, Vector2 unitPos, double direction,Color drawColor, float baseWidth = 4)
