@@ -13,6 +13,8 @@ public class ShipControl
     /// PID Controll for the Nozzle Angle
     /// </summary>
     public PidController NozzleControl { get; }
+    
+    public Vector2 GravityVerctor = Vector2.Zero;
 
     private double _desierdThrustForward;
     public double DesierdThrustForward
@@ -110,6 +112,23 @@ public class ShipControl
         //GD.Print($"PID: target:{targetAng} - actual:{_ship.Direction} --> {outval}");
         outval = Mathf.Clamp(outval, -_ship.NozzleMax, _ship.NozzleMax);
         _ship.SetNozzle(outval);
+    }
+
+    /// <summary>
+    /// TODO Add Option for Intertia correction
+    /// </summary>
+    /// <param name="targetpos"></param>
+    /// <param name="deltaT"></param>
+    public void MoveTowards(Vector2 targetpos,double deltaT)
+    {
+        MoveTowards(targetpos, deltaT, DesierdThrustForward);
+    }
+    public void MoveTowards(Vector2 targetpos,double deltaT, double Thrust)
+    {
+        var angle = DisplayHelper.ScreenCenter.AngleToPoint(targetpos) ;
+        SetNozzle(Mathf.RadToDeg(angle),deltaT);
+        
+        GameManager.PlayerShip.SetThruster(Thrust);
     }
     
 }

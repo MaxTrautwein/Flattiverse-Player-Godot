@@ -101,6 +101,7 @@ public partial class hud : CanvasLayer
 		{
 			GameManager.Galaxy.Chat(_chatMsgLine.Text);
 			_chatMsgLine.Text = "";
+			_chatMsgLine.ReleaseFocus();
 		}
 
 		foreach (var msg in NewMsgs)

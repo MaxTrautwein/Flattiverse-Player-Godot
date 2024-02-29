@@ -32,6 +32,8 @@ public partial class PlayerShip : Node2D
 		}
 	}
 
+	
+
 	private double _direction = 0;
 	private double _shipSize = 0;
 
@@ -43,5 +45,14 @@ public partial class PlayerShip : Node2D
 		DrawCircle(playerPos, PlayerDisplayRadius,Colors.Green);
 		
 		DisplayHelper.DrawDirectionIndicator(this,PlayerDisplayRadius,playerPos,_direction,Colors.Pink);
+		
+		var direction = Vector2.Zero.AngleToPoint(game.GetInstance.ShipController.GravityVerctor) ;
+		
+		//GD.Print($"{direction}");
+		
+		DisplayHelper.DrawDirectionIndicator(this,PlayerDisplayRadius * 2,playerPos, Mathf.RadToDeg(direction) ,Colors.Red,2);
+		
+		
+		
 	}
 }

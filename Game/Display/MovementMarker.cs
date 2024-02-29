@@ -10,6 +10,7 @@ public partial class MovementMarker : Node2D
         drawPos = target;
     }
     private Vector2 drawPos;
+    public Vector2 targetPos => drawPos;
     public override void _Process(double delta)
     {
         QueueRedraw();

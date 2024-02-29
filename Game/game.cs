@@ -1,6 +1,7 @@
 using System;
 using Godot;
 using System.Collections.Generic;
+using Flattiverse.Connector;
 using Flattiverse.Connector.Units;
 using Flattiverse.Game;
 using Flattiverse.Utils;
@@ -99,19 +100,46 @@ public partial class game : Node
 			DisplayHelper.Zoom = 1f;
 		}
 	}
-	
+
+	private bool AutoPilotActive = false;
+
+	private void CalcGravity()
+	{
+		Controllable gravitee = ShipController.Ship;
+		Vector2 KnownGravity = Vector2.Zero;
+		
+		foreach (Unit gravitor in _displayMap.Keys)
+		{
+			Vector2 diff = gravitor.Position.ToGodot() - gravitee.Position.ToGodot();
+			
+			var factor = gravitor.Gravity * 60.0 / (diff.LengthSquared() > 3600.0f ? diff.Length() : 60.0);
+			diff = diff.Normalized() * (float)factor;
+			
+			
+			KnownGravity += diff;
+		}
+
+		ShipController.GravityVerctor = KnownGravity;
+
+
+		//GD.Print($"Total GravityEffect {KnownGravity.Length()}");
+
+
+	}
 	
 	public override void _Process(double delta)
 	{
 		if (GameManager.PlayerShip is null) return;
 		if (ShipController is null) ShipController = new ShipControl(GameManager.PlayerShip);
 		ZoomHandler();
+		CalcGravity();
 
 		if (Input.IsActionJustPressed("MoveToPos"))
 		{
 			var pos = DisplayHelper.TransformToGamePos(DisplayHelper.MouseDisplayPos(this));
 			MovementMarker marker = new MovementMarker(pos);
 			_movementMarkers.Add(marker);
+			AutoPilotActive = true;
 			
 			GD.Print($"Set Marker @{pos}");
 			_instance.CallDeferred("add_child", marker);
@@ -120,12 +148,11 @@ public partial class game : Node
 		{
 			//Get the Position
 			Vector2 targetpos = GetViewport().GetMousePosition();// InputEventMouse.position;
-			var angle = DisplayHelper.ScreenCenter.AngleToPoint(targetpos) ;
 			
-			GameManager.PlayerShip.SetThruster(GameManager.PlayerShip.ThrusterMaxForward);
-			ShipController.SetNozzle(Mathf.RadToDeg(angle),delta);
+			ShipController.MoveTowards(targetpos,delta,GameManager.PlayerShip.ThrusterMaxForward);
+			
 		}
-		else
+		else if (!AutoPilotActive)
 		{
 			GameManager.PlayerShip.SetThruster(0);	
 			ShipController.StabilizeTurn();
@@ -133,6 +160,8 @@ public partial class game : Node
 
 		if (Input.IsActionPressed("Stabelize"))
 		{
+
+			AutoPilotActive = false;
 			ShipController.StabilizePosition(delta);
 
 			foreach (var marker in _movementMarkers)
@@ -141,6 +170,29 @@ public partial class game : Node
 			}
 			_movementMarkers.RemoveAll((e) => true);
 			
+		}
+
+		if (AutoPilotActive)
+		{
+			
+			var targetpos = _movementMarkers[0].targetPos;
+			var distance = ShipController.Ship.Position.ToGodot().DistanceTo(targetpos);
+			//GD.Print($"{distance}");
+			
+			
+			
+			ShipController.MoveTowards(DisplayHelper.TransformToDisplay(targetpos),delta);
+			
+			if (distance < 10)
+			{
+				RemoveChild(_movementMarkers[0]);
+				_movementMarkers.RemoveAt(0); 
+			}
+		}
+		
+		if (_movementMarkers.Count == 0)
+		{
+			AutoPilotActive = false;
 		}
 		
 		
