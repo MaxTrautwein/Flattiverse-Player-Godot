@@ -10,6 +10,21 @@ public partial class game : Node
 {
 	private static game _instance;
 	public static game GetInstance => _instance;
+	
+	/// <summary>
+	/// Units to Display
+	/// </summary>
+	private static readonly Dictionary<Unit, GameObject> _displayMap = new Dictionary<Unit, GameObject>();
+	/// <summary>
+	/// Moments Markers
+	/// </summary>
+	private static List<MovementMarker> _movementMarkers = new List<MovementMarker>();
+	
+	/// <summary>
+	/// Handles the Control of a Controllable
+	/// </summary>
+	public ShipControl ShipController = null;
+	
 	public game()
 	{
 		_instance = this;
@@ -17,12 +32,8 @@ public partial class game : Node
 
 	public override void _Ready()
 	{
-		_nozzelControl = new PidController(0.1, 0, -0.3, 0);
+		
 	}
-
-	public PidController NozzelControl => _nozzelControl;
-
-	
 
 	public static void RegisterUnit(Unit unit)
 	{
@@ -66,13 +77,11 @@ public partial class game : Node
 	public static void DeRegisterUnit(Unit unit)
 	{
 		//Todo need to test if this work like i think
-		_instance.CallDeferred("RemoveChild", _displayMap[unit]);
+		_instance.CallDeferred("remove_child", _displayMap[unit]);
 		_displayMap.Remove(unit);
 	}
 
-	private static readonly Dictionary<Unit, GameObject> _displayMap = new Dictionary<Unit, GameObject>();
-	private static List<MovementMarker> _movementMarkers = new List<MovementMarker>();
-	
+
 	// Called every frame. 'delta' is the elapsed time since the previous frame.
 
 	private void ZoomHandler()
@@ -91,10 +100,11 @@ public partial class game : Node
 		}
 	}
 	
+	
 	public override void _Process(double delta)
 	{
 		if (GameManager.PlayerShip is null) return;
-
+		if (ShipController is null) ShipController = new ShipControl(GameManager.PlayerShip);
 		ZoomHandler();
 
 		if (Input.IsActionJustPressed("MoveToPos"))
@@ -113,17 +123,17 @@ public partial class game : Node
 			var angle = DisplayHelper.ScreenCenter.AngleToPoint(targetpos) ;
 			
 			GameManager.PlayerShip.SetThruster(GameManager.PlayerShip.ThrusterMaxForward);
-			SetNozzel(Mathf.RadToDeg(angle),delta);
+			ShipController.SetNozzle(Mathf.RadToDeg(angle),delta);
 		}
 		else
 		{
 			GameManager.PlayerShip.SetThruster(0);	
-			StabelizeTurn();
+			ShipController.StabilizeTurn();
 		}
 
 		if (Input.IsActionPressed("Stabelize"))
 		{
-			StabelizePosition(delta);
+			ShipController.StabilizePosition(delta);
 
 			foreach (var marker in _movementMarkers)
 			{
@@ -136,94 +146,6 @@ public partial class game : Node
 		
 	}
 
-	private void StabelizePositionReverse(double deltaT, float ang)
-	{
-		SetNozzel(ang, deltaT);
-
-		if (CalcDiff(ang) < 10)
-		{
-			var speed = GameManager.PlayerShip.Movement.Length;
-			var thruster = 0.02;
-
-			thruster = Mathf.Min(thruster, speed / 5);
-			//GD.Print($"{movement.toGodot()}- in {ang} --> {thruster}");
-			thruster = Mathf.Min(thruster, GameManager.PlayerShip.ThrusterMaxBackward);
-			
-			GameManager.PlayerShip.SetThruster(-thruster);
-		}
-	}
-
-	//TODO Check somthing is broken here
-	private void StabelizePositionForward(double deltaT, float ang)
-	{
-		SetNozzel(ang + 180, deltaT);
-
-		if (CalcDiff(ang) < 10)
-		{
-			var speed = GameManager.PlayerShip.Movement.Length;
-			var thruster = 0.02;
-
-			thruster = speed / 5;
-			
-			thruster = Mathf.Min(thruster, GameManager.PlayerShip.ThrusterMaxForward);
-			
-			
-			GameManager.PlayerShip.SetThruster(thruster);
-		}
-	}
-	
-	private void StabelizePosition(double deltaT)
-	{
-		var movement = GameManager.PlayerShip.Movement;
 
 
-		var ang = Mathf.RadToDeg( Vector2.Zero.AngleToPoint(movement.ToGodot()));
-
-		if (movement.Length > 0.5)
-		{
-			//	StabelizePositionForward(deltaT, ang);
-			StabelizePositionReverse(deltaT, ang);
-		}
-		else
-		{
-			StabelizePositionReverse(deltaT, ang);
-		}
-		
-
-
-	}
-
-	private void StabelizeTurn()
-	{
-		//Try To Stabelize the rotation
-		var turnrate = GameManager.PlayerShip.Turnrate;
-		var nozzelMax = GameManager.PlayerShip.NozzleMax;
-
-		var nozzel =  Mathf.Clamp(-turnrate, -nozzelMax,nozzelMax) ;
-		
-		GameManager.PlayerShip.SetNozzle( nozzel);
-	}
-
-	private double CalcDiff(double target)
-	{
-		//Normalize Target
-		var targetAng = (target + 360) % 360;
-		
-		return targetAng - GameManager.PlayerShip.Direction;
-	}
-	
-	private PidController _nozzelControl;
-	
-
-	private void SetNozzel(float targetAng,double deltaT)
-	{
-		targetAng = (targetAng + 360) % 360;
-		
-		var outval = _nozzelControl.Control(deltaT, targetAng, GameManager.PlayerShip.Direction, GameManager.PlayerShip.Turnrate);
-		
-		//GD.Print($"PID: target:{targetAng} - actual:{GameManager.PlayerShip.Direction} --> {outval}");
-		outval = Mathf.Clamp(outval, -GameManager.PlayerShip.NozzleMax, GameManager.PlayerShip.NozzleMax);
-		GameManager.PlayerShip.SetNozzle(outval);
-	}
-	
 }

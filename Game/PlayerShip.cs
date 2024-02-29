@@ -25,7 +25,6 @@ public partial class PlayerShip : Node2D
 			_shipSize = GameManager.PlayerShip.Size;
 
 			DisplayHelper.PlayerPos = GameManager.PlayerShip.Position.ToGodot();
-			//	GD.Print($"{GameManager.PlayerShip.Position}");
 			
 			_direction = GameManager.PlayerShip.Direction;
 			

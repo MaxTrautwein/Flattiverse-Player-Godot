@@ -87,4 +87,5 @@ offset_top = 384.0
 offset_right = 32.0
 offset_bottom = 704.0
 tooltip_text = "Desierd Thrust"
+max_value = 0.035
 allow_lesser = true

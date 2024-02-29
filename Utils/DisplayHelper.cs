@@ -1,3 +1,4 @@
+using Flattiverse.Game;
 using Godot;
 
 namespace Flattiverse.Utils;
@@ -90,6 +91,15 @@ public static class DisplayHelper
         var width = 5 * DisplayHelper.Zoom;
         drawRef.DrawArc(pos,innerRad, startAng,stopAng,100,color,width);
         drawRef.DrawArc(pos,outerRad, startAng,stopAng,100,color,width);
+    }
+    
+    
+    public static double CalcDiff(double target)
+    {
+        //Normalize Target
+        var targetAng = (target + 360) % 360;
+		
+        return targetAng - GameManager.PlayerShip.Direction;
     }
     
 }

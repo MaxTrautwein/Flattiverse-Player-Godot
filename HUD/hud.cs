@@ -12,6 +12,7 @@ public partial class hud : CanvasLayer
 	private Label _statusLine;
 	private Label _positionInfo;
 	private RichTextLabel _chatBox;
+	private VSlider _targetThrustForward;
 
 	private bool _usePidSettings = false;
 	private SpinBox _kp;
@@ -28,6 +29,7 @@ public partial class hud : CanvasLayer
 		_statusLine = GetNode<Label>("StatusBar");
 		_positionInfo = GetNode<Label>("PositionInfo");
 		_chatBox = GetNode<RichTextLabel>("ChatBox");
+		_targetThrustForward = GetNode<VSlider>("ThrustSlider");
 
 		_kp = GetNode<SpinBox>("SpinBoxKP");
 		_ki = GetNode<SpinBox>("SpinBoxKI");
@@ -69,6 +71,29 @@ public partial class hud : CanvasLayer
 			
 			_positionInfo.Text = string.Format($"Pos: {ship.Position.ToString()} ---{DisplayHelper.TransformToGamePos( DisplayHelper.MouseDisplayPos(this))} ");
 			
+			
+			
+			
+			
+			
+			var speedIncrement = game.GetInstance.ShipController.Ship.ThrusterMaxForward / 10;
+			if (Input.IsActionJustPressed("IncreaseSpeed"))
+			{
+				GD.Print($"Increased Speed from {game.GetInstance.ShipController.DesierdThrustForward} by {speedIncrement}");
+				game.GetInstance.ShipController.DesierdThrustForward += speedIncrement;
+			}
+			if (Input.IsActionJustPressed("DecreaseSpeed"))
+			{
+				game.GetInstance.ShipController.DesierdThrustForward -= speedIncrement;
+			}
+
+			_targetThrustForward.Step = game.GetInstance.ShipController.Ship.ThrusterMaxForward / 100;
+			_targetThrustForward.MaxValue = game.GetInstance.ShipController.Ship.ThrusterMaxForward;
+			
+			_targetThrustForward.Value = game.GetInstance.ShipController.DesierdThrustForward;
+
+			
+			
 		}
 
 
@@ -84,6 +109,7 @@ public partial class hud : CanvasLayer
 		}
 		NewMsgs.Clear();
 
+
 		
 
 		//UpdatePID();
@@ -91,7 +117,7 @@ public partial class hud : CanvasLayer
 
 	private void UpdatePID()
 	{
-		var nozzelControl = game.GetInstance.NozzelControl;
+		var nozzelControl = game.GetInstance.ShipController.NozzleControl;
 		nozzelControl.Ki = _ki.Value;
 		nozzelControl.Kp = _kp.Value;
 		nozzelControl.Kd = _kd.Value;
