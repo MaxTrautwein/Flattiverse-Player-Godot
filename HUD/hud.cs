@@ -79,7 +79,7 @@ public partial class hud : CanvasLayer
 			var energy = FormatPercentage("Energy", ship.Energy, ship.EnergyMax);
 			var shields = FormatPercentage("Shields", ship.Shields, ship.ShieldsMax);
 			
-			_statusLine.Text = string.Format($"{hull}- {energy}- {shields}- dir={ship.Direction:F}, Thrust={ship.Thruster:0.0000}, Nozzel={ship.Nozzle:F}, TURNRATE={ship.Turnrate:F}, SPEED={ship.Movement.Length}"); 
+			_statusLine.Text = string.Format($"{hull}- {energy}- {shields}- dir={ship.Direction:F}, Thrust={ship.Thruster: 0.000;-0.000}, Nozzel={ship.Nozzle:F}, TURNRATE={ship.Turnrate:F}, SPEED={ship.Movement.Length:0.0000}"); 
 			
 			
 			_positionInfo.Text = string.Format($"Pos: {ship.Position.ToString()} ---{DisplayHelper.TransformToGamePos( DisplayHelper.MouseDisplayPos(this))} ");

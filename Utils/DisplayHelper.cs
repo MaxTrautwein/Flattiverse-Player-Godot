@@ -1,3 +1,4 @@
+using System;
 using Flattiverse.Game;
 using Godot;
 
@@ -91,6 +92,18 @@ public static class DisplayHelper
         var width = 5 * DisplayHelper.Zoom;
         drawRef.DrawArc(pos,innerRad, startAng,stopAng,100,color,width);
         drawRef.DrawArc(pos,outerRad, startAng,stopAng,100,color,width);
+        
+        //Close the Sections off
+
+        var startStart = pos + Vector2.Right.Rotated(startAng) * innerRad;
+        var startEnd = pos+ Vector2.Right.Rotated(startAng) * outerRad;
+        
+        var endStart = pos + Vector2.Right.Rotated(stopAng) * innerRad;
+        var endEnd = pos+ Vector2.Right.Rotated(stopAng) * outerRad;
+        
+        if (Math.Abs(Mathf.Abs(angleFrom-angleTo) - 360) < 0.1) return;
+        drawRef.DrawLine(startStart,startEnd,color,width);
+        drawRef.DrawLine(endStart,endEnd,color,width);
     }
     
     
