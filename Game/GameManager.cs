@@ -120,7 +120,7 @@ public static class GameManager
         }
     }
 
-    private static string ShipName => "MaxShipName";
+    private static string ShipName => "Max-Space";
 
     private static async void CreateShip()
     {

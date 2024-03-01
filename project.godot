@@ -25,6 +25,10 @@ window/stretch/mode="canvas_items"
 
 project/assembly_name="Flattiverse"
 
+[gui]
+
+theme/custom_font="res://Fonts/JetBrainsMono-Light.ttf"
+
 [input]
 
 MoveInDirection={
