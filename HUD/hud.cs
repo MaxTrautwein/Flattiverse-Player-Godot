@@ -76,7 +76,7 @@ public partial class hud : CanvasLayer
 			
 			
 			
-			var speedIncrement = game.GetInstance.ShipController.Ship.ThrusterMaxForward / 10;
+			var speedIncrement = game.GetInstance.ShipController.Ship.ThrusterForwardMax / 10;
 			if (Input.IsActionJustPressed("IncreaseSpeed"))
 			{
 				GD.Print($"Increased Speed from {game.GetInstance.ShipController.DesierdThrustForward} by {speedIncrement}");
@@ -87,8 +87,8 @@ public partial class hud : CanvasLayer
 				game.GetInstance.ShipController.DesierdThrustForward -= speedIncrement;
 			}
 
-			_targetThrustForward.Step = game.GetInstance.ShipController.Ship.ThrusterMaxForward / 100;
-			_targetThrustForward.MaxValue = game.GetInstance.ShipController.Ship.ThrusterMaxForward;
+			_targetThrustForward.Step = game.GetInstance.ShipController.Ship.ThrusterForwardMax / 100;
+			_targetThrustForward.MaxValue = game.GetInstance.ShipController.Ship.ThrusterForwardMax;
 			
 			_targetThrustForward.Value = game.GetInstance.ShipController.DesierdThrustForward;
 

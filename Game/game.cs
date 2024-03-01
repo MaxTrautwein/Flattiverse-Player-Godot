@@ -1,6 +1,7 @@
 using System;
 using Godot;
 using System.Collections.Generic;
+using System.Linq;
 using Flattiverse.Connector;
 using Flattiverse.Connector.Units;
 using Flattiverse.Game;
@@ -77,7 +78,7 @@ public partial class game : Node
 	}
 	public static void DeRegisterUnit(Unit unit)
 	{
-		//Todo need to test if this work like i think
+		//Todo Only Remove stuff that is moving freely or dead
 		_instance.CallDeferred("remove_child", _displayMap[unit]);
 		_displayMap.Remove(unit);
 	}
@@ -105,26 +106,7 @@ public partial class game : Node
 
 	private void CalcGravity()
 	{
-		Controllable gravitee = ShipController.Ship;
-		Vector2 KnownGravity = Vector2.Zero;
-		
-		foreach (Unit gravitor in _displayMap.Keys)
-		{
-			Vector2 diff = gravitor.Position.ToGodot() - gravitee.Position.ToGodot();
-			
-			var factor = gravitor.Gravity * 60.0 / (diff.LengthSquared() > 3600.0f ? diff.Length() : 60.0);
-			diff = diff.Normalized() * (float)factor;
-			
-			
-			KnownGravity += diff;
-		}
-
-		ShipController.GravityVerctor = KnownGravity;
-
-
-		//GD.Print($"Total GravityEffect {KnownGravity.Length()}");
-
-
+		ShipController.GravityVector = VectorCalc.CalcGravity(_displayMap.Keys.ToList(),ShipController.Position);
 	}
 	
 	public override void _Process(double delta)
@@ -149,7 +131,7 @@ public partial class game : Node
 			//Get the Position
 			Vector2 targetpos = GetViewport().GetMousePosition();// InputEventMouse.position;
 			
-			ShipController.MoveTowards(targetpos,delta,GameManager.PlayerShip.ThrusterMaxForward);
+			ShipController.MoveTowards(targetpos,delta,GameManager.PlayerShip.ThrusterForwardMax);
 			
 		}
 		else if (!AutoPilotActive)
@@ -176,7 +158,7 @@ public partial class game : Node
 		{
 			
 			var targetpos = _movementMarkers[0].targetPos;
-			var distance = ShipController.Ship.Position.ToGodot().DistanceTo(targetpos);
+			var distance = ShipController.Position.DistanceTo(targetpos);
 			//GD.Print($"{distance}");
 			
 			

@@ -22,7 +22,7 @@ public partial class PlayerShip : Node2D
 	{
 		if (GameManager.PlayerShip != null)
 		{
-			_shipSize = GameManager.PlayerShip.Size;
+			_shipSize = GameManager.PlayerShip.Radius;
 
 			DisplayHelper.PlayerPos = GameManager.PlayerShip.Position.ToGodot();
 			
@@ -46,11 +46,15 @@ public partial class PlayerShip : Node2D
 		
 		DisplayHelper.DrawDirectionIndicator(this,PlayerDisplayRadius,playerPos,_direction,Colors.Pink);
 		
-		var direction = Vector2.Zero.AngleToPoint(game.GetInstance.ShipController.GravityVerctor) ;
+		
 		
 		//GD.Print($"{direction}");
-		
-		DisplayHelper.DrawDirectionIndicator(this,PlayerDisplayRadius * 2,playerPos, Mathf.RadToDeg(direction) ,Colors.Red,2);
+		//Gravity
+		var gravityDirection = Mathf.RadToDeg(Vector2.Zero.AngleToPoint(game.GetInstance.ShipController.GravityVector) );
+		DisplayHelper.DrawDirectionIndicator(this,PlayerDisplayRadius * 2,playerPos, gravityDirection,Colors.Red,2);
+
+		var movementDirection = game.GetInstance.ShipController.MovementDirectionDeg;// Mathf.RadToDeg(Vector2.Zero.AngleToPoint(game.GetInstance.ShipController.Ship.Movement.ToGodot()) );
+		DisplayHelper.DrawDirectionIndicator(this,PlayerDisplayRadius * 3,playerPos, movementDirection ,Colors.DeepPink,1);
 		
 		
 		

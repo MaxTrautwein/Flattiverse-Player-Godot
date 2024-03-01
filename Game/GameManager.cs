@@ -94,7 +94,13 @@ public static class GameManager
                 case EventKind.PlayerChat:
                 case EventKind.TeamChat:
                     hud.RegisterChatMsg((@event as ChatEvent)?.ToString());
-                    
+                    break;
+
+                case EventKind.DeathByShutdown:
+                case EventKind.DeathBySelfDestruction:
+                case EventKind.DeathByNeutralCollision:
+                case EventKind.DeathByControllableCollision:
+                    GD.Print($"Death Event: {@event}");
                     break;
                 default:
                     throw new ArgumentOutOfRangeException();
