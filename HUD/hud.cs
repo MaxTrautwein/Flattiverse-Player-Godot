@@ -52,7 +52,7 @@ public partial class hud : CanvasLayer
 	}
 	private string FormatPercentage(string name, double value, double valueMax)
 	{
-		return string.Format($"{name}: {value / valueMax:P2}% ");
+		return string.Format($"{name}: {value / valueMax:P2} ");
 	}
 
 	public static void ShowRespawn()

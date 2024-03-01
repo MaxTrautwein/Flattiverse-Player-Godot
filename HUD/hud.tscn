@@ -15,12 +15,16 @@ anchor_bottom = 1.0
 offset_top = -23.0
 grow_horizontal = 2
 grow_vertical = 0
+theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
+theme_override_constants/outline_size = 4
 theme_override_fonts/font = ExtResource("2_127qu")
 text = "Hull: 100% - Energy: 100% - ..."
 
 [node name="FPS_Cnt" type="Label" parent="."]
 offset_right = 40.0
 offset_bottom = 23.0
+theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
+theme_override_constants/outline_size = 4
 
 [node name="ChatBox" type="RichTextLabel" parent="."]
 anchors_preset = 1
@@ -82,6 +86,8 @@ offset_top = -48.0
 offset_bottom = -25.0
 grow_horizontal = 2
 grow_vertical = 0
+theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
+theme_override_constants/outline_size = 4
 theme_override_fonts/font = ExtResource("2_127qu")
 text = "Hello World"
 

@@ -1,7 +1,4 @@
 using Godot;
-using System;
-using System.Linq;
-using Flattiverse.Connector;
 using Flattiverse.Connector.Units;
 using Flattiverse.Utils;
 
@@ -36,9 +33,24 @@ public partial class GameObject : Node2D
 	public override void _Draw()
 	{
 		base._Draw();
+
+		string text = DisplayString;
+		var t = ThemeDB.FallbackFont;
+
+		var size_base16 = t.GetStringSize(text);
+		var radius = _unit.Radius * DisplayHelper.Zoom;
 		
-		DrawCircle(GoDotPos, (float)(_unit.Radius * DisplayHelper.Zoom),UnitColor);
-		DrawMultilineString(ThemeDB.FallbackFont,GoDotPos,DisplayString, fontSize: Mathf.CeilToInt(16 * DisplayHelper.Zoom) , modulate: TextColor );
+		DrawCircle(GoDotPos, (float)(radius),UnitColor);
+
+		var sizeFactor = (radius * 2) / size_base16.Length();
+		// TODO we need some form of a override for very small objects
+		// Maybe the old way? 
+		int fontSize = Mathf.CeilToInt(16 * sizeFactor);
+		
+		//TODO seem a bit too much to the right
+		Vector2 drawpos = GoDotPos - size_base16 * (float)sizeFactor * 0.5f;
+		
+		DrawMultilineString(ThemeDB.FallbackFont,drawpos,text, fontSize: fontSize, modulate: TextColor );
 		
 	}
 
