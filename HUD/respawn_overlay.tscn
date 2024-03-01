@@ -1,0 +1,13 @@
+[gd_scene load_steps=2 format=3 uid="uid://nhixrans4o61"]
+
+[ext_resource type="Script" path="res://HUD/RespawnOverlay.cs" id="1_4emud"]
+
+[node name="RespawnOverlay" type="CanvasLayer"]
+script = ExtResource("1_4emud")
+
+[node name="RespawnButton" type="Button" parent="."]
+offset_left = 648.0
+offset_top = 192.0
+offset_right = 816.0
+offset_bottom = 280.0
+text = "Respawn"

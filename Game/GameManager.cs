@@ -40,7 +40,12 @@ public static class GameManager
         get => _teamName;
         set => _teamName = value;
     }
-    
+
+    public static void Respawn()
+    {
+        _playerShip.Continue();
+
+    }
     public static async void Connect()
     {
         var targetGalaxy = _universe.Galaxies[_galaxyName];
@@ -77,6 +82,12 @@ public static class GameManager
                 case EventKind.UnitVanished:
                     unit = ((UnitEvent)@event).Unit;
                     //knownUnits.Remove(_unit);
+                    if (unit.Name == ShipName && unit.Kind == UnitKind.PlayerUnit)
+                    {
+                        hud.ShouldShowRespawn = true;
+                       // hud.Instance.CallDeferred("ShowRespawn()");
+                        break;
+                    }
                     game.DeRegisterUnit(unit);
 
                     break;

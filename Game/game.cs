@@ -85,7 +85,10 @@ public partial class game : Node
 
 
 	// Called every frame. 'delta' is the elapsed time since the previous frame.
-
+	
+	/// <summary>
+	/// Handle the Zoom adjustments
+	/// </summary>
 	private void ZoomHandler()
 	{
 		if (Input.IsActionJustPressed("ZoomIn"))
@@ -131,7 +134,7 @@ public partial class game : Node
 			//Get the Position
 			Vector2 targetpos = GetViewport().GetMousePosition();// InputEventMouse.position;
 			
-			ShipController.MoveTowards(targetpos,delta);
+			ShipController.MoveTowards(targetpos);
 			
 		}
 		else if (!AutoPilotActive)
@@ -159,7 +162,7 @@ public partial class game : Node
 			var targetpos = _movementMarkers[0].targetPos;
 			var distance = ShipController.Position.DistanceTo(targetpos);
 			
-			ShipController.MoveTowards(DisplayHelper.TransformToDisplay(targetpos),delta);
+			ShipController.MoveTowards(DisplayHelper.TransformToDisplay(targetpos));
 			
 			if (distance < 10)
 			{

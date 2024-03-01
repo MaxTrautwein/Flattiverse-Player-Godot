@@ -1,6 +1,7 @@
-[gd_scene load_steps=2 format=3 uid="uid://bjodovntg4dbd"]
+[gd_scene load_steps=3 format=3 uid="uid://bjodovntg4dbd"]
 
 [ext_resource type="Script" path="res://HUD/hud.cs" id="1_qgecp"]
+[ext_resource type="PackedScene" uid="uid://nhixrans4o61" path="res://HUD/respawn_overlay.tscn" id="2_ldhd7"]
 
 [node name="HUD" type="CanvasLayer"]
 script = ExtResource("1_qgecp")
@@ -89,3 +90,6 @@ offset_bottom = 704.0
 tooltip_text = "Desierd Thrust"
 max_value = 0.035
 allow_lesser = true
+
+[node name="RespawnOverlay" parent="." instance=ExtResource("2_ldhd7")]
+visible = false

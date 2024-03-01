@@ -55,7 +55,7 @@ public class ShipControl
     
     private void StabilizePositionReverse(double deltaT, float ang)
     {
-        SetNozzle(ang, deltaT);
+        SetNozzle(ang);
 
         if (DisplayHelper.CalcDiff(ang) < 10)
         {
@@ -71,7 +71,7 @@ public class ShipControl
     //TODO Check something is broken here
     private void StabilizePositionForward(double deltaT, float ang)
     {
-        SetNozzle(ang + 180, deltaT);
+        SetNozzle(ang + 180);
 
         if (DisplayHelper.CalcDiff(ang) < 10)
         {
@@ -117,7 +117,7 @@ public class ShipControl
     /// </summary>
     /// <param name="targetAng"></param>
     /// <param name="deltaT"></param>
-    public void SetNozzle(float targetAng,double deltaT)
+    public void SetNozzle(float targetAng)
     {
         targetAng = (targetAng + 360) % 360;
 		
@@ -132,9 +132,9 @@ public class ShipControl
     /// </summary>
     /// <param name="targetpos">In the Display System</param>
     /// <param name="deltaT"></param>
-    public void MoveTowards(Vector2 targetpos,double deltaT)
+    public void MoveTowards(Vector2 targetpos)
     {
-        MoveTowards(targetpos, deltaT, DesierdThrustForward);
+        MoveTowards(targetpos, DesierdThrustForward);
     }
     
     /// <summary>
@@ -143,11 +143,11 @@ public class ShipControl
     /// <param name="targetpos">In the Display System</param>
     /// <param name="deltaT"></param>
     /// <param name="Thrust"></param>
-    public void MoveTowards(Vector2 targetpos,double deltaT, double Thrust)
+    public void MoveTowards(Vector2 targetpos, double Thrust)
     {
         var Targetangle = Mathf.RadToDeg(DisplayHelper.ScreenCenter.AngleToPoint(targetpos)) ;
         
-        SetNozzle(Targetangle,deltaT);
+        SetNozzle(Targetangle);
         
         GameManager.PlayerShip.SetThruster(Thrust);
     }

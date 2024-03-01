@@ -8,7 +8,7 @@ public static class VectorCalc
 {
     /// <summary>
     /// Calculate the total Known Gravity Vector for a given Position
-    ///
+    /// 
     /// Game Vector Space
     /// </summary>
     /// <param name="gravitors">List of known things with an affect on gravity (Position & Gravity-Strength)</param>
