@@ -76,7 +76,7 @@ public partial class hud : CanvasLayer
 			
 			
 			
-			var speedIncrement = game.GetInstance.ShipController.Ship.ThrusterForwardMax / 10;
+			var speedIncrement = game.GetInstance.ShipController.ThrusterForwardMax / 10;
 			if (Input.IsActionJustPressed("IncreaseSpeed"))
 			{
 				GD.Print($"Increased Speed from {game.GetInstance.ShipController.DesierdThrustForward} by {speedIncrement}");
@@ -87,8 +87,8 @@ public partial class hud : CanvasLayer
 				game.GetInstance.ShipController.DesierdThrustForward -= speedIncrement;
 			}
 
-			_targetThrustForward.Step = game.GetInstance.ShipController.Ship.ThrusterForwardMax / 100;
-			_targetThrustForward.MaxValue = game.GetInstance.ShipController.Ship.ThrusterForwardMax;
+			_targetThrustForward.Step = game.GetInstance.ShipController.ThrusterForwardMax / 100;
+			_targetThrustForward.MaxValue = game.GetInstance.ShipController.ThrusterForwardMax;
 			
 			_targetThrustForward.Value = game.GetInstance.ShipController.DesierdThrustForward;
 
@@ -109,20 +109,18 @@ public partial class hud : CanvasLayer
 			_chatBox.Text += msg + "\n";
 		}
 		NewMsgs.Clear();
-
-
 		
-
 		//UpdatePID();
 	}
 
 	private void UpdatePID()
 	{
+		/*
 		var nozzelControl = game.GetInstance.ShipController.NozzleControl;
 		nozzelControl.Ki = _ki.Value;
 		nozzelControl.Kp = _kp.Value;
 		nozzelControl.Kd = _kd.Value;
 		nozzelControl.Bias = _bias.Value;
-
+		*/
 	}
 }

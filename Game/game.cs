@@ -131,7 +131,7 @@ public partial class game : Node
 			//Get the Position
 			Vector2 targetpos = GetViewport().GetMousePosition();// InputEventMouse.position;
 			
-			ShipController.MoveTowards(targetpos,delta,GameManager.PlayerShip.ThrusterForwardMax);
+			ShipController.MoveTowards(targetpos,delta);
 			
 		}
 		else if (!AutoPilotActive)
@@ -156,12 +156,8 @@ public partial class game : Node
 
 		if (AutoPilotActive)
 		{
-			
 			var targetpos = _movementMarkers[0].targetPos;
 			var distance = ShipController.Position.DistanceTo(targetpos);
-			//GD.Print($"{distance}");
-			
-			
 			
 			ShipController.MoveTowards(DisplayHelper.TransformToDisplay(targetpos),delta);
 			

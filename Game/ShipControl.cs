@@ -7,12 +7,13 @@ namespace Flattiverse.Game;
 public class ShipControl
 {
     private readonly Controllable _ship;
-    public Controllable Ship => _ship;
-
+    
     /// <summary>
     /// Movement Vector of the Ship as a Vector2
     /// </summary>
     public Vector2 Movement => _ship.Movement.ToGodot();
+
+    public double MovementSpeed => _ship.Movement.Length;
 
     /// <summary>
     /// Game Position as a Vector2
@@ -25,7 +26,7 @@ public class ShipControl
     /// <summary>
     /// PID Controll for the Nozzle Angle
     /// </summary>
-    public PidController NozzleControl { get; }
+    public PDController NozzleControl { get; }
     
     public Vector2 GravityVector = Vector2.Zero;
 
@@ -49,7 +50,7 @@ public class ShipControl
     public ShipControl(Controllable ship)
     {
         _ship = ship;
-        NozzleControl = new PidController(0.1, 0, -0.3, 0);
+        NozzleControl = new PDController(0.1, -0.3);
     }
     
     private void StabilizePositionReverse(double deltaT, float ang)
@@ -58,12 +59,10 @@ public class ShipControl
 
         if (DisplayHelper.CalcDiff(ang) < 10)
         {
-            var speed = _ship.Movement.Length;
             var thruster = 0.02;
 
-            thruster = Mathf.Min(thruster, speed / 5);
-            //GD.Print($"{movement.toGodot()}- in {ang} --> {thruster}");
-            thruster = Mathf.Min(thruster, _ship.ThrusterBackwardMax);
+            thruster = Mathf.Min(thruster, MovementSpeed / 5);
+            thruster = Mathf.Min(thruster, ThrusterBackwardMax);
 			
             _ship.SetThruster(-thruster);
         }
@@ -76,12 +75,11 @@ public class ShipControl
 
         if (DisplayHelper.CalcDiff(ang) < 10)
         {
-            var speed = _ship.Movement.Length;
             var thruster = 0.02;
 
-            thruster = speed / 5;
+            thruster = MovementSpeed / 5;
 			
-            thruster = Mathf.Min(thruster, _ship.ThrusterForwardMax);
+            thruster = Mathf.Min(thruster, ThrusterForwardMax);
 			
 			
             _ship.SetThruster(thruster);
@@ -90,12 +88,9 @@ public class ShipControl
 	
     public void StabilizePosition(double deltaT)
     {
-        var movement = _ship.Movement;
+        var ang = Mathf.RadToDeg( Vector2.Zero.AngleToPoint(Movement));
 
-
-        var ang = Mathf.RadToDeg( Vector2.Zero.AngleToPoint(movement.ToGodot()));
-
-        if (movement.Length > 0.5)
+        if (MovementSpeed > 0.5)
         {
             //	StabilizePositionForward(deltaT, ang);
             StabilizePositionReverse(deltaT, ang);
@@ -126,9 +121,8 @@ public class ShipControl
     {
         targetAng = (targetAng + 360) % 360;
 		
-        var outval = NozzleControl.Control(deltaT, targetAng, _ship.Direction, _ship.Turnrate);
+        var outval = NozzleControl.Control(targetAng, _ship.Direction, _ship.Turnrate);
 		
-        //GD.Print($"PID: target:{targetAng} - actual:{_ship.Direction} --> {outval}");
         outval = Mathf.Clamp(outval, -_ship.NozzleMax, _ship.NozzleMax);
         _ship.SetNozzle(outval);
     }
