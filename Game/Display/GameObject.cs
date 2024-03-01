@@ -47,10 +47,11 @@ public partial class GameObject : Node2D
 		// Maybe the old way? 
 		int fontSize = Mathf.CeilToInt(16 * sizeFactor);
 		
-		//TODO seem a bit too much to the right
-		Vector2 drawpos = GoDotPos - size_base16 * (float)sizeFactor * 0.5f;
+		// I Would have assumed that moving by halve the size would center it
+		// but it appears 0.35 does the trick (0.5 is too far to the left)
+		Vector2 drawpos = GoDotPos - size_base16 * (float)sizeFactor * 0.35f;
 		
-		DrawMultilineString(ThemeDB.FallbackFont,drawpos,text, fontSize: fontSize, modulate: TextColor );
+		DrawMultilineString(ThemeDB.FallbackFont,drawpos,text, fontSize: fontSize, modulate: TextColor,alignment: HorizontalAlignment.Center );
 		
 	}
 
